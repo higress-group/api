@@ -37430,6 +37430,11 @@
                 "id": 64,
                 "name": "tls_defaults",
                 "type": "TLSConfig"
+              },
+              {
+                "id": 1002,
+                "name": "mse_ingress_global_config",
+                "type": "MSEIngressGlobalConfig"
               }
             ],
             "reserved_ids": [
@@ -38240,6 +38245,32 @@
                 "is_repeated": true
               }
             ]
+          },
+          {
+            "name": "MSEIngressGlobalConfig",
+            "fields": [
+              {
+                "id": 1,
+                "name": "tls_min_protocol_version",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "tls_max_protocol_version",
+                "type": "string"
+              },
+              {
+                "id": 3,
+                "name": "tls_cipher_suites",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 4,
+                "name": "upstream_idle_timeout",
+                "type": "google.protobuf.Duration"
+              }
+            ]
           }
         ],
         "imports": [
@@ -38985,6 +39016,11 @@
                 "id": 39,
                 "name": "proxy_headers",
                 "type": "ProxyHeaders"
+              },
+              {
+                "id": 110,
+                "name": "disable_alpn_h2",
+                "type": "bool"
               }
             ],
             "maps": [
@@ -41198,6 +41234,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 25,
+                "name": "internal_active_redirect",
+                "type": "HTTPInternalActiveRedirect"
+              },
+              {
                 "id": 21,
                 "name": "direct_response",
                 "type": "HTTPDirectResponse"
@@ -41972,6 +42013,131 @@
                 "id": 1,
                 "name": "value",
                 "type": "double"
+              }
+            ]
+          },
+          {
+            "name": "HTTPInternalActiveRedirect",
+            "fields": [
+              {
+                "id": 1,
+                "name": "max_internal_redirects",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "redirect_response_codes",
+                "type": "uint32",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "redirect_url",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "redirect_url_rewrite_regex",
+                "type": "RegexMatchAndSubstitute"
+              },
+              {
+                "id": 5,
+                "name": "allow_cross_scheme",
+                "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "headers",
+                "type": "Headers"
+              },
+              {
+                "id": 7,
+                "name": "authority",
+                "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "forced_use_original_host",
+                "type": "bool"
+              },
+              {
+                "id": 17,
+                "name": "forced_add_header_before_route_matcher",
+                "type": "bool"
+              },
+              {
+                "id": 15,
+                "name": "policies",
+                "type": "RedirectPolicy",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "RedirectPolicy",
+                "fields": [
+                  {
+                    "id": 8,
+                    "name": "max_internal_redirects",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 9,
+                    "name": "redirect_response_codes",
+                    "type": "uint32",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 10,
+                    "name": "redirect_url",
+                    "type": "string"
+                  },
+                  {
+                    "id": 11,
+                    "name": "redirect_url_rewrite_regex",
+                    "type": "RegexMatchAndSubstitute"
+                  },
+                  {
+                    "id": 12,
+                    "name": "allow_cross_scheme",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 13,
+                    "name": "headers",
+                    "type": "Headers"
+                  },
+                  {
+                    "id": 14,
+                    "name": "authority",
+                    "type": "string"
+                  },
+                  {
+                    "id": 17,
+                    "name": "forced_use_original_host",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 18,
+                    "name": "forced_add_header_before_route_matcher",
+                    "type": "bool"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "RegexMatchAndSubstitute",
+            "fields": [
+              {
+                "id": 1,
+                "name": "pattern",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "substitution",
+                "type": "string"
               }
             ]
           }
@@ -43782,6 +43948,11 @@
                 "type": "HTTPRedirect"
               },
               {
+                "id": 25,
+                "name": "internal_active_redirect",
+                "type": "HTTPInternalActiveRedirect"
+              },
+              {
                 "id": 21,
                 "name": "direct_response",
                 "type": "HTTPDirectResponse"
@@ -44556,6 +44727,131 @@
                 "id": 1,
                 "name": "value",
                 "type": "double"
+              }
+            ]
+          },
+          {
+            "name": "HTTPInternalActiveRedirect",
+            "fields": [
+              {
+                "id": 1,
+                "name": "max_internal_redirects",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "redirect_response_codes",
+                "type": "uint32",
+                "is_repeated": true
+              },
+              {
+                "id": 3,
+                "name": "redirect_url",
+                "type": "string"
+              },
+              {
+                "id": 4,
+                "name": "redirect_url_rewrite_regex",
+                "type": "RegexMatchAndSubstitute"
+              },
+              {
+                "id": 5,
+                "name": "allow_cross_scheme",
+                "type": "bool"
+              },
+              {
+                "id": 6,
+                "name": "headers",
+                "type": "Headers"
+              },
+              {
+                "id": 7,
+                "name": "authority",
+                "type": "string"
+              },
+              {
+                "id": 16,
+                "name": "forced_use_original_host",
+                "type": "bool"
+              },
+              {
+                "id": 17,
+                "name": "forced_add_header_before_route_matcher",
+                "type": "bool"
+              },
+              {
+                "id": 15,
+                "name": "policies",
+                "type": "RedirectPolicy",
+                "is_repeated": true
+              }
+            ],
+            "messages": [
+              {
+                "name": "RedirectPolicy",
+                "fields": [
+                  {
+                    "id": 8,
+                    "name": "max_internal_redirects",
+                    "type": "uint32"
+                  },
+                  {
+                    "id": 9,
+                    "name": "redirect_response_codes",
+                    "type": "uint32",
+                    "is_repeated": true
+                  },
+                  {
+                    "id": 10,
+                    "name": "redirect_url",
+                    "type": "string"
+                  },
+                  {
+                    "id": 11,
+                    "name": "redirect_url_rewrite_regex",
+                    "type": "RegexMatchAndSubstitute"
+                  },
+                  {
+                    "id": 12,
+                    "name": "allow_cross_scheme",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 13,
+                    "name": "headers",
+                    "type": "Headers"
+                  },
+                  {
+                    "id": 14,
+                    "name": "authority",
+                    "type": "string"
+                  },
+                  {
+                    "id": 17,
+                    "name": "forced_use_original_host",
+                    "type": "bool"
+                  },
+                  {
+                    "id": 18,
+                    "name": "forced_add_header_before_route_matcher",
+                    "type": "bool"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "RegexMatchAndSubstitute",
+            "fields": [
+              {
+                "id": 1,
+                "name": "pattern",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "substitution",
+                "type": "string"
               }
             ]
           }

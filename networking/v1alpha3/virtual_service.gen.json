@@ -318,6 +318,173 @@
           }
         ]
       },
+      "istio.networking.v1alpha3.HTTPInternalActiveRedirect": {
+        "description": "Added by ingress More detail information, please see envoy document about InternalRedirectPolicy. The only difference is that this redirect policy allow user to specify how to control the redirect url.",
+        "type": "object",
+        "properties": {
+          "maxInternalRedirects": {
+            "type": "integer"
+          },
+          "redirectResponseCodes": {
+            "description": "Invalid code is in [200, 301, 302, 303, 304, 307, 308]",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "allowCrossScheme": {
+            "type": "boolean"
+          },
+          "headers": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
+          },
+          "authority": {
+            "description": "During internal redirect, rewrite the Authority/Host header with this value.",
+            "type": "string"
+          },
+          "forcedUseOriginalHost": {
+            "description": "If true, the host name in the downstream request is used for redirection.",
+            "type": "boolean"
+          },
+          "forcedAddHeaderBeforeRouteMatcher": {
+            "type": "boolean"
+          },
+          "policies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPInternalActiveRedirect.RedirectPolicy"
+            }
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "redirectUrl"
+                  ],
+                  "properties": {
+                    "redirectUrl": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "redirectUrlRewriteRegex"
+                  ],
+                  "properties": {
+                    "redirectUrlRewriteRegex": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "redirectUrl"
+            ],
+            "properties": {
+              "redirectUrl": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "redirectUrlRewriteRegex"
+            ],
+            "properties": {
+              "redirectUrlRewriteRegex": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
+              }
+            }
+          }
+        ]
+      },
+      "istio.networking.v1alpha3.HTTPInternalActiveRedirect.RedirectPolicy": {
+        "type": "object",
+        "properties": {
+          "maxInternalRedirects": {
+            "type": "integer"
+          },
+          "redirectResponseCodes": {
+            "description": "Invalid code is in [200, 301, 302, 303, 304, 307, 308]",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "allowCrossScheme": {
+            "type": "boolean"
+          },
+          "headers": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.Headers"
+          },
+          "authority": {
+            "description": "During internal redirect, rewrite the Authority/Host header with this value.",
+            "type": "string"
+          },
+          "forcedUseOriginalHost": {
+            "description": "If true, the host name in the downstream request is used for redirection.",
+            "type": "boolean"
+          },
+          "forcedAddHeaderBeforeRouteMatcher": {
+            "type": "boolean"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "redirectUrl"
+                  ],
+                  "properties": {
+                    "redirectUrl": {
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "redirectUrlRewriteRegex"
+                  ],
+                  "properties": {
+                    "redirectUrlRewriteRegex": {
+                      "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "redirectUrl"
+            ],
+            "properties": {
+              "redirectUrl": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "redirectUrlRewriteRegex"
+            ],
+            "properties": {
+              "redirectUrlRewriteRegex": {
+                "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
+              }
+            }
+          }
+        ]
+      },
       "istio.networking.v1alpha3.HTTPMatchRequest": {
         "description": "HttpMatchRequest specifies a set of criterion to be met in order for the rule to be applied to the HTTP request. For example, the following restricts the rule to match only requests where the URL path starts with /ratings/v2/ and the request contains a custom `end-user` header with value `jason`.",
         "type": "object",
@@ -548,6 +715,9 @@
           "redirect": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect"
           },
+          "internalActiveRedirect": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPInternalActiveRedirect"
+          },
           "directResponse": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPDirectResponse"
           },
@@ -706,6 +876,20 @@
           "number": {
             "description": "Valid port number",
             "type": "integer"
+          }
+        }
+      },
+      "istio.networking.v1alpha3.RegexMatchAndSubstitute": {
+        "description": "Describes how to match a string and then produce a new string using a regular expression and a substitution string.",
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+            "type": "string"
+          },
+          "substitution": {
+            "description": "The string that should be substituted into matching portions of the subject string during a substitution operation to produce a new string.",
+            "type": "string"
           }
         }
       },

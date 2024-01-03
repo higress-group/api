@@ -682,6 +682,11 @@ message ProxyConfig {
     // If IN_MESH, these headers will not be appended to outbound requests from sidecars to services not in-mesh.
     MetadataExchangeHeaders metadata_exchange_headers = 6;
   }
+
+  // Added by ingress
+  // Disable apln h2 protocol for envoy proxy.
+  bool disable_alpn_h2 = 110;
+  // End added by ingress
 }
 
 message RemoteService {

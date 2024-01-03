@@ -4483,6 +4483,162 @@ spec:
                               type: object
                           type: object
                       type: object
+                    internalActiveRedirect:
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - redirectUrl
+                          - required:
+                            - redirectUrlRewriteRegex
+                      - required:
+                        - redirectUrl
+                      - required:
+                        - redirectUrlRewriteRegex
+                      properties:
+                        allowCrossScheme:
+                          type: boolean
+                        authority:
+                          description: During internal redirect, rewrite the Authority/Host
+                            header with this value.
+                          type: string
+                        forcedAddHeaderBeforeRouteMatcher:
+                          type: boolean
+                        forcedUseOriginalHost:
+                          description: If true, the host name in the downstream request
+                            is used for redirection.
+                          type: boolean
+                        headers:
+                          description: Currently, only support for the add operation
+                            for request header.
+                          properties:
+                            request:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            response:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                          type: object
+                        maxInternalRedirects:
+                          type: integer
+                        policies:
+                          items:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - redirectUrl
+                                - required:
+                                  - redirectUrlRewriteRegex
+                            - required:
+                              - redirectUrl
+                            - required:
+                              - redirectUrlRewriteRegex
+                            properties:
+                              allowCrossScheme:
+                                type: boolean
+                              authority:
+                                description: During internal redirect, rewrite the
+                                  Authority/Host header with this value.
+                                type: string
+                              forcedAddHeaderBeforeRouteMatcher:
+                                type: boolean
+                              forcedUseOriginalHost:
+                                description: If true, the host name in the downstream
+                                  request is used for redirection.
+                                type: boolean
+                              headers:
+                                description: Currently, only support for the add operation
+                                  for request header.
+                                properties:
+                                  request:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                  response:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                type: object
+                              maxInternalRedirects:
+                                type: integer
+                              redirectResponseCodes:
+                                items:
+                                  type: integer
+                                type: array
+                              redirectUrl:
+                                type: string
+                              redirectUrlRewriteRegex:
+                                properties:
+                                  pattern:
+                                    description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                    type: string
+                                  substitution:
+                                    type: string
+                                type: object
+                            type: object
+                          type: array
+                        redirectResponseCodes:
+                          items:
+                            type: integer
+                          type: array
+                        redirectUrl:
+                          type: string
+                        redirectUrlRewriteRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              type: string
+                          type: object
+                      type: object
                     match:
                       items:
                         properties:
@@ -5304,6 +5460,162 @@ spec:
                               additionalProperties:
                                 type: string
                               type: object
+                          type: object
+                      type: object
+                    internalActiveRedirect:
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - redirectUrl
+                          - required:
+                            - redirectUrlRewriteRegex
+                      - required:
+                        - redirectUrl
+                      - required:
+                        - redirectUrlRewriteRegex
+                      properties:
+                        allowCrossScheme:
+                          type: boolean
+                        authority:
+                          description: During internal redirect, rewrite the Authority/Host
+                            header with this value.
+                          type: string
+                        forcedAddHeaderBeforeRouteMatcher:
+                          type: boolean
+                        forcedUseOriginalHost:
+                          description: If true, the host name in the downstream request
+                            is used for redirection.
+                          type: boolean
+                        headers:
+                          description: Currently, only support for the add operation
+                            for request header.
+                          properties:
+                            request:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            response:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                          type: object
+                        maxInternalRedirects:
+                          type: integer
+                        policies:
+                          items:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - redirectUrl
+                                - required:
+                                  - redirectUrlRewriteRegex
+                            - required:
+                              - redirectUrl
+                            - required:
+                              - redirectUrlRewriteRegex
+                            properties:
+                              allowCrossScheme:
+                                type: boolean
+                              authority:
+                                description: During internal redirect, rewrite the
+                                  Authority/Host header with this value.
+                                type: string
+                              forcedAddHeaderBeforeRouteMatcher:
+                                type: boolean
+                              forcedUseOriginalHost:
+                                description: If true, the host name in the downstream
+                                  request is used for redirection.
+                                type: boolean
+                              headers:
+                                description: Currently, only support for the add operation
+                                  for request header.
+                                properties:
+                                  request:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                  response:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                type: object
+                              maxInternalRedirects:
+                                type: integer
+                              redirectResponseCodes:
+                                items:
+                                  type: integer
+                                type: array
+                              redirectUrl:
+                                type: string
+                              redirectUrlRewriteRegex:
+                                properties:
+                                  pattern:
+                                    description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                    type: string
+                                  substitution:
+                                    type: string
+                                type: object
+                            type: object
+                          type: array
+                        redirectResponseCodes:
+                          items:
+                            type: integer
+                          type: array
+                        redirectUrl:
+                          type: string
+                        redirectUrlRewriteRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              type: string
                           type: object
                       type: object
                     match:

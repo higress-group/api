@@ -64,6 +64,29 @@
           "ALWAYS_FORWARD_ONLY"
         ]
       },
+      "istio.mesh.v1alpha1.MSEIngressGlobalConfig": {
+        "type": "object",
+        "properties": {
+          "tlsMinProtocolVersion": {
+            "description": "Control tls min protocol version for all gateways.",
+            "type": "string"
+          },
+          "tlsMaxProtocolVersion": {
+            "description": "Control tls max protocol version for all gateways.",
+            "type": "string"
+          },
+          "tlsCipherSuites": {
+            "description": "Control tls cipher suites for all gateways.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "upstreamIdleTimeout": {
+            "type": "string"
+          }
+        }
+      },
       "istio.mesh.v1alpha1.MeshConfig": {
         "description": "MeshConfig defines mesh-wide settings for the Istio service mesh.",
         "type": "object",
@@ -267,6 +290,9 @@
           },
           "tlsDefaults": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
+          },
+          "mseIngressGlobalConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MSEIngressGlobalConfig"
           }
         }
       },
@@ -1658,6 +1684,10 @@
           },
           "proxyHeaders": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.ProxyConfig.ProxyHeaders"
+          },
+          "disableAlpnH2": {
+            "description": "Added by ingress Disable apln h2 protocol for envoy proxy.",
+            "type": "boolean"
           }
         },
         "oneOf": [

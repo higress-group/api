@@ -303,6 +303,39 @@ func (this *Percent) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect
+func (this *HTTPInternalActiveRedirect) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect
+func (this *HTTPInternalActiveRedirect) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect_RedirectPolicy
+func (this *HTTPInternalActiveRedirect_RedirectPolicy) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect_RedirectPolicy
+func (this *HTTPInternalActiveRedirect_RedirectPolicy) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for RegexMatchAndSubstitute
+func (this *RegexMatchAndSubstitute) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for RegexMatchAndSubstitute
+func (this *RegexMatchAndSubstitute) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	VirtualServiceMarshaler   = &jsonpb.Marshaler{}
 	VirtualServiceUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}

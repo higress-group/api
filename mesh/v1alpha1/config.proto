@@ -1168,6 +1168,10 @@ message MeshConfig {
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
 
+  // Added by ingress
+  MSEIngressGlobalConfig mse_ingress_global_config = 1002;
+  // End Added by ingress
+
   // $hide_from_docs
   // Next available field number: 66
   reserved 1;
@@ -1264,4 +1268,17 @@ message Certificate {
   // The DNS names for the certificate. A certificate may contain
   // multiple DNS names.
   repeated string dns_names = 2;
+}
+
+message MSEIngressGlobalConfig {
+  // Control tls min protocol version for all gateways.
+  string tls_min_protocol_version = 1;
+
+  // Control tls max protocol version for all gateways.
+  string tls_max_protocol_version = 2;
+
+  // Control tls cipher suites for all gateways.
+  repeated string tls_cipher_suites = 3;
+
+  google.protobuf.Duration upstream_idle_timeout = 4;
 }
