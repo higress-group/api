@@ -4271,6 +4271,57 @@ spec:
                 items:
                   type: string
                 type: array
+              hostHTTPFilters:
+                description: HTTP Filters for host scope.
+                items:
+                  oneOf:
+                  - not:
+                      anyOf:
+                      - required:
+                        - ipAccessControl
+                      - required:
+                        - localRateLimit
+                  - required:
+                    - ipAccessControl
+                  - required:
+                    - localRateLimit
+                  properties:
+                    disable:
+                      description: Disable this filter and all request will pass.
+                      type: boolean
+                    ipAccessControl:
+                      properties:
+                        notRemoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                        remoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    localRateLimit:
+                      properties:
+                        perDownstreamConnection:
+                          type: boolean
+                        statusCode:
+                          description: Default rate limit status code is 429.
+                          type: integer
+                        tokenBucket:
+                          properties:
+                            fillInterval:
+                              type: string
+                            maxTokens:
+                              type: integer
+                            tokensPefFill:
+                              type: integer
+                          type: object
+                      type: object
+                    name:
+                      description: The http filter name should be meaningful.
+                      type: string
+                  type: object
+                type: array
               hosts:
                 description: The destination hosts to which traffic is being sent.
                 items:
@@ -5023,6 +5074,25 @@ spec:
                                 description: The name of a subset within the service.
                                 type: string
                             type: object
+                          fallbackClusters:
+                            items:
+                              properties:
+                                host:
+                                  description: The name of a service from the service
+                                    registry.
+                                  type: string
+                                port:
+                                  description: Specifies the port on the host that
+                                    is being addressed.
+                                  properties:
+                                    number:
+                                      type: integer
+                                  type: object
+                                subset:
+                                  description: The name of a subset within the service.
+                                  type: string
+                              type: object
+                            type: array
                           headers:
                             properties:
                               request:
@@ -5250,6 +5320,57 @@ spec:
                 items:
                   type: string
                 type: array
+              hostHTTPFilters:
+                description: HTTP Filters for host scope.
+                items:
+                  oneOf:
+                  - not:
+                      anyOf:
+                      - required:
+                        - ipAccessControl
+                      - required:
+                        - localRateLimit
+                  - required:
+                    - ipAccessControl
+                  - required:
+                    - localRateLimit
+                  properties:
+                    disable:
+                      description: Disable this filter and all request will pass.
+                      type: boolean
+                    ipAccessControl:
+                      properties:
+                        notRemoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                        remoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    localRateLimit:
+                      properties:
+                        perDownstreamConnection:
+                          type: boolean
+                        statusCode:
+                          description: Default rate limit status code is 429.
+                          type: integer
+                        tokenBucket:
+                          properties:
+                            fillInterval:
+                              type: string
+                            maxTokens:
+                              type: integer
+                            tokensPefFill:
+                              type: integer
+                          type: object
+                      type: object
+                    name:
+                      description: The http filter name should be meaningful.
+                      type: string
+                  type: object
+                type: array
               hosts:
                 description: The destination hosts to which traffic is being sent.
                 items:
@@ -6002,6 +6123,25 @@ spec:
                                 description: The name of a subset within the service.
                                 type: string
                             type: object
+                          fallbackClusters:
+                            items:
+                              properties:
+                                host:
+                                  description: The name of a service from the service
+                                    registry.
+                                  type: string
+                                port:
+                                  description: Specifies the port on the host that
+                                    is being addressed.
+                                  properties:
+                                    number:
+                                      type: integer
+                                  type: object
+                                subset:
+                                  description: The name of a subset within the service.
+                                  type: string
+                              type: object
+                            type: array
                           headers:
                             properties:
                               request:

@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 31
+number_of_entries: 35
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -203,6 +203,17 @@ gateway (<code>mesh</code>) will be used, which would apply the rule to all
 sidecars in the mesh. If a list of gateway names is provided, the
 rules will apply only to the gateways. To apply the rules to both
 gateways and sidecars, specify <code>mesh</code> as one of the gateway names.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="VirtualService-hostHTTPFilters">
+<td><code>hostHTTPFilters</code></td>
+<td><code><a href="#HTTPFilter">HTTPFilter[]</a></code></td>
+<td>
+<p>HTTP Filters for host scope.</p>
 
 </td>
 <td>
@@ -1673,6 +1684,17 @@ No
 No
 </td>
 </tr>
+<tr id="HTTPRouteDestination-fallback_clusters">
+<td><code>fallbackClusters</code></td>
+<td><code><a href="#Destination">Destination[]</a></code></td>
+<td>
+<p>Added by ingress</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -2958,6 +2980,185 @@ No
 <p>The string that should be substituted into matching portions of the
 subject string during a substitution operation to produce a new string.</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPFilter">HTTPFilter</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPFilter-name">
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>
+<p>The http filter name should be meaningful.
+E.g. ip-access-control, jwt, rbac, cors.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPFilter-disable">
+<td><code>disable</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Disable this filter and all request will pass.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPFilter-ip_access_control" class="oneof oneof-start">
+<td><code>ipAccessControl</code></td>
+<td><code><a href="#IPAccessControl">IPAccessControl (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPFilter-local_rate_limit" class="oneof">
+<td><code>localRateLimit</code></td>
+<td><code><a href="#LocalRateLimit">LocalRateLimit (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="IPAccessControl">IPAccessControl</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="IPAccessControl-remote_ip_blocks">
+<td><code>remoteIpBlocks</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Used for white ip access control</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="IPAccessControl-not_remote_ip_blocks">
+<td><code>notRemoteIpBlocks</code></td>
+<td><code>string[]</code></td>
+<td>
+<p>Used for black ip access control</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit">LocalRateLimit</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-token_bucket">
+<td><code>tokenBucket</code></td>
+<td><code><a href="#TokenBucket">TokenBucket</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-per_downstream_connection">
+<td><code>perDownstreamConnection</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="LocalRateLimit-status_code">
+<td><code>statusCode</code></td>
+<td><code>uint32</code></td>
+<td>
+<p>Default rate limit status code is 429.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TokenBucket">TokenBucket</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TokenBucket-max_tokens">
+<td><code>maxTokens</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TokenBucket-tokens_pef_fill">
+<td><code>tokensPefFill</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="TokenBucket-fill_interval">
+<td><code>fillInterval</code></td>
+<td><code><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></code></td>
+<td>
 </td>
 <td>
 No

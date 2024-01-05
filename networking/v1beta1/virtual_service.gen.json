@@ -318,6 +318,67 @@
           }
         ]
       },
+      "istio.networking.v1beta1.HTTPFilter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The http filter name should be meaningful. E.g. ip-access-control, jwt, rbac, cors.",
+            "type": "string"
+          },
+          "disable": {
+            "description": "Disable this filter and all request will pass.",
+            "type": "boolean"
+          }
+        },
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "ipAccessControl"
+                  ],
+                  "properties": {
+                    "ipAccessControl": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.IPAccessControl"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "localRateLimit"
+                  ],
+                  "properties": {
+                    "localRateLimit": {
+                      "$ref": "#/components/schemas/istio.networking.v1beta1.LocalRateLimit"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "ipAccessControl"
+            ],
+            "properties": {
+              "ipAccessControl": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.IPAccessControl"
+              }
+            }
+          },
+          {
+            "required": [
+              "localRateLimit"
+            ],
+            "properties": {
+              "localRateLimit": {
+                "$ref": "#/components/schemas/istio.networking.v1beta1.LocalRateLimit"
+              }
+            }
+          }
+        ]
+      },
       "istio.networking.v1beta1.HTTPInternalActiveRedirect": {
         "description": "Added by ingress More detail information, please see envoy document about InternalRedirectPolicy. The only difference is that this redirect policy allow user to specify how to control the redirect url.",
         "type": "object",
@@ -778,6 +839,13 @@
           },
           "headers": {
             "$ref": "#/components/schemas/istio.networking.v1beta1.Headers"
+          },
+          "fallbackClusters": {
+            "description": "Added by ingress",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.Destination"
+            }
           }
         }
       },
@@ -813,6 +881,25 @@
           },
           "remove": {
             "description": "Remove the specified headers",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "istio.networking.v1beta1.IPAccessControl": {
+        "type": "object",
+        "properties": {
+          "remoteIpBlocks": {
+            "description": "Used for white ip access control",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notRemoteIpBlocks": {
+            "description": "Used for black ip access control",
             "type": "array",
             "items": {
               "type": "string"
@@ -856,6 +943,21 @@
           "sourceNamespace": {
             "description": "Source namespace constraining the applicability of a rule to workloads in that namespace. If the VirtualService has a list of gateways specified in the top-level `gateways` field, it must include the reserved gateway `mesh` for this field to be applicable.",
             "type": "string"
+          }
+        }
+      },
+      "istio.networking.v1beta1.LocalRateLimit": {
+        "type": "object",
+        "properties": {
+          "tokenBucket": {
+            "$ref": "#/components/schemas/istio.networking.v1beta1.TokenBucket"
+          },
+          "perDownstreamConnection": {
+            "type": "boolean"
+          },
+          "statusCode": {
+            "description": "Default rate limit status code is 429.",
+            "type": "integer"
           }
         }
       },
@@ -1080,6 +1182,20 @@
           }
         }
       },
+      "istio.networking.v1beta1.TokenBucket": {
+        "type": "object",
+        "properties": {
+          "maxTokens": {
+            "type": "integer"
+          },
+          "tokensPefFill": {
+            "type": "integer"
+          },
+          "fillInterval": {
+            "type": "string"
+          }
+        }
+      },
       "istio.networking.v1beta1.VirtualService": {
         "description": "Configuration affecting traffic routing.",
         "type": "object",
@@ -1096,6 +1212,13 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "hostHTTPFilters": {
+            "description": "HTTP Filters for host scope.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1beta1.HTTPFilter"
             }
           },
           "http": {

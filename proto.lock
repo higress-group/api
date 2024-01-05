@@ -41157,6 +41157,12 @@
                 "is_repeated": true
               },
               {
+                "id": 1000,
+                "name": "hostHTTPFilters",
+                "type": "HTTPFilter",
+                "is_repeated": true
+              },
+              {
                 "id": 3,
                 "name": "http",
                 "type": "HTTPRoute",
@@ -41537,6 +41543,12 @@
                 "id": 7,
                 "name": "headers",
                 "type": "Headers"
+              },
+              {
+                "id": 100,
+                "name": "fallback_clusters",
+                "type": "Destination",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -42138,6 +42150,88 @@
                 "id": 2,
                 "name": "substitution",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "HTTPFilter",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "disable",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "ip_access_control",
+                "type": "IPAccessControl"
+              },
+              {
+                "id": 4,
+                "name": "local_rate_limit",
+                "type": "LocalRateLimit"
+              }
+            ]
+          },
+          {
+            "name": "IPAccessControl",
+            "fields": [
+              {
+                "id": 1,
+                "name": "remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "not_remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "LocalRateLimit",
+            "fields": [
+              {
+                "id": 1,
+                "name": "token_bucket",
+                "type": "TokenBucket"
+              },
+              {
+                "id": 2,
+                "name": "per_downstream_connection",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "status_code",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "TokenBucket",
+            "fields": [
+              {
+                "id": 1,
+                "name": "max_tokens",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "tokens_pef_fill",
+                "type": "uint32"
+              },
+              {
+                "id": 3,
+                "name": "fill_interval",
+                "type": "google.protobuf.Duration"
               }
             ]
           }
@@ -43871,6 +43965,12 @@
                 "is_repeated": true
               },
               {
+                "id": 1000,
+                "name": "hostHTTPFilters",
+                "type": "HTTPFilter",
+                "is_repeated": true
+              },
+              {
                 "id": 3,
                 "name": "http",
                 "type": "HTTPRoute",
@@ -44251,6 +44351,12 @@
                 "id": 7,
                 "name": "headers",
                 "type": "Headers"
+              },
+              {
+                "id": 100,
+                "name": "fallback_clusters",
+                "type": "Destination",
+                "is_repeated": true
               }
             ],
             "reserved_ids": [
@@ -44852,6 +44958,88 @@
                 "id": 2,
                 "name": "substitution",
                 "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "HTTPFilter",
+            "fields": [
+              {
+                "id": 1,
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "id": 2,
+                "name": "disable",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "ip_access_control",
+                "type": "IPAccessControl"
+              },
+              {
+                "id": 4,
+                "name": "local_rate_limit",
+                "type": "LocalRateLimit"
+              }
+            ]
+          },
+          {
+            "name": "IPAccessControl",
+            "fields": [
+              {
+                "id": 1,
+                "name": "remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              },
+              {
+                "id": 2,
+                "name": "not_remote_ip_blocks",
+                "type": "string",
+                "is_repeated": true
+              }
+            ]
+          },
+          {
+            "name": "LocalRateLimit",
+            "fields": [
+              {
+                "id": 1,
+                "name": "token_bucket",
+                "type": "TokenBucket"
+              },
+              {
+                "id": 2,
+                "name": "per_downstream_connection",
+                "type": "bool"
+              },
+              {
+                "id": 3,
+                "name": "status_code",
+                "type": "uint32"
+              }
+            ]
+          },
+          {
+            "name": "TokenBucket",
+            "fields": [
+              {
+                "id": 1,
+                "name": "max_tokens",
+                "type": "uint32"
+              },
+              {
+                "id": 2,
+                "name": "tokens_pef_fill",
+                "type": "uint32"
+              },
+              {
+                "id": 3,
+                "name": "fill_interval",
+                "type": "google.protobuf.Duration"
               }
             ]
           }
