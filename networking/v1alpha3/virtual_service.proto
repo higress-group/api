@@ -583,6 +583,9 @@ message HTTPRoute {
   // service version determine the proportion of traffic it receives.
   repeated HTTPRouteDestination route = 2;
 
+  // HTTP Filters for route scope.
+  repeated HTTPFilter routeHTTPFilters = 1000;
+
   // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
   // If traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to

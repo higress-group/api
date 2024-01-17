@@ -5133,6 +5133,58 @@ spec:
                             type: integer
                         type: object
                       type: array
+                    routeHTTPFilters:
+                      description: HTTP Filters for route scope.
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - ipAccessControl
+                            - required:
+                              - localRateLimit
+                        - required:
+                          - ipAccessControl
+                        - required:
+                          - localRateLimit
+                        properties:
+                          disable:
+                            description: Disable this filter and all request will
+                              pass.
+                            type: boolean
+                          ipAccessControl:
+                            properties:
+                              notRemoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          localRateLimit:
+                            properties:
+                              perDownstreamConnection:
+                                type: boolean
+                              statusCode:
+                                description: Default rate limit status code is 429.
+                                type: integer
+                              tokenBucket:
+                                properties:
+                                  fillInterval:
+                                    type: string
+                                  maxTokens:
+                                    type: integer
+                                  tokensPefFill:
+                                    type: integer
+                                type: object
+                            type: object
+                          name:
+                            description: The http filter name should be meaningful.
+                            type: string
+                        type: object
+                      type: array
                     timeout:
                       description: Timeout for HTTP requests, default is disabled.
                       type: string
@@ -6180,6 +6232,58 @@ spec:
                               of traffic to be forwarded to the destination.
                             format: int32
                             type: integer
+                        type: object
+                      type: array
+                    routeHTTPFilters:
+                      description: HTTP Filters for route scope.
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - ipAccessControl
+                            - required:
+                              - localRateLimit
+                        - required:
+                          - ipAccessControl
+                        - required:
+                          - localRateLimit
+                        properties:
+                          disable:
+                            description: Disable this filter and all request will
+                              pass.
+                            type: boolean
+                          ipAccessControl:
+                            properties:
+                              notRemoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          localRateLimit:
+                            properties:
+                              perDownstreamConnection:
+                                type: boolean
+                              statusCode:
+                                description: Default rate limit status code is 429.
+                                type: integer
+                              tokenBucket:
+                                properties:
+                                  fillInterval:
+                                    type: string
+                                  maxTokens:
+                                    type: integer
+                                  tokensPefFill:
+                                    type: integer
+                                type: object
+                            type: object
+                          name:
+                            description: The http filter name should be meaningful.
+                            type: string
                         type: object
                       type: array
                     timeout:

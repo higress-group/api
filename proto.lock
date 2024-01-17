@@ -41235,6 +41235,12 @@
                 "is_repeated": true
               },
               {
+                "id": 1000,
+                "name": "routeHTTPFilters",
+                "type": "HTTPFilter",
+                "is_repeated": true
+              },
+              {
                 "id": 3,
                 "name": "redirect",
                 "type": "HTTPRedirect"
@@ -44040,6 +44046,12 @@
                 "id": 2,
                 "name": "route",
                 "type": "HTTPRouteDestination",
+                "is_repeated": true
+              },
+              {
+                "id": 1000,
+                "name": "routeHTTPFilters",
+                "type": "HTTPFilter",
                 "is_repeated": true
               },
               {

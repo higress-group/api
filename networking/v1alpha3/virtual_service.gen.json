@@ -773,6 +773,13 @@
               "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRouteDestination"
             }
           },
+          "routeHTTPFilters": {
+            "description": "HTTP Filters for route scope.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPFilter"
+            }
+          },
           "redirect": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRedirect"
           },
