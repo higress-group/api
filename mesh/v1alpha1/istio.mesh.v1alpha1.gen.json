@@ -65,6 +65,7 @@
         ]
       },
       "istio.mesh.v1alpha1.MSEIngressGlobalConfig": {
+        "description": "Add by ingress",
         "type": "object",
         "properties": {
           "tlsMinProtocolVersion": {
@@ -84,6 +85,31 @@
           },
           "upstreamIdleTimeout": {
             "type": "string"
+          },
+          "enableH3": {
+            "type": "boolean"
+          },
+          "accessLogFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.mesh.v1alpha1.MSEIngressGlobalConfig.AccessLogFilter"
+            }
+          },
+          "enableProxyProtocol": {
+            "type": "boolean"
+          }
+        }
+      },
+      "istio.mesh.v1alpha1.MSEIngressGlobalConfig.AccessLogFilter": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "description": "The user should make sure the host following the re2 syntax if the host is wirecard.",
+            "type": "string"
+          },
+          "sampleRate": {
+            "description": "Control the log whether or not log.",
+            "type": "integer"
           }
         }
       },
@@ -285,14 +311,17 @@
           "defaultHttpRetryPolicy": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPRetry"
           },
+          "cryptombConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.CryptombPrivateKeyConfig"
+          },
+          "mseIngressGlobalConfig": {
+            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MSEIngressGlobalConfig"
+          },
           "meshMTLS": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
           },
           "tlsDefaults": {
             "$ref": "#/components/schemas/istio.mesh.v1alpha1.MeshConfig.TLSConfig"
-          },
-          "mseIngressGlobalConfig": {
-            "$ref": "#/components/schemas/istio.mesh.v1alpha1.MSEIngressGlobalConfig"
           }
         }
       },
@@ -400,6 +429,21 @@
             }
           }
         ]
+      },
+      "istio.mesh.v1alpha1.MeshConfig.CryptombPrivateKeyConfig": {
+        "description": "Add by ingress",
+        "type": "object",
+        "properties": {
+          "enableCryptomb": {
+            "type": "boolean"
+          },
+          "poolDelay": {
+            "type": "string"
+          },
+          "enableQat": {
+            "type": "boolean"
+          }
+        }
       },
       "istio.mesh.v1alpha1.MeshConfig.DefaultProviders": {
         "description": "Holds the name references to the providers that will be used by default in other Istio configuration resources if the provider is not specified.",
