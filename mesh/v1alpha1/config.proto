@@ -1111,6 +1111,20 @@ message MeshConfig {
   // configured globally via this field.
   istio.networking.v1alpha3.HTTPRetry default_http_retry_policy = 62;
 
+  // Add by ingress
+  message CryptombPrivateKeyConfig {
+    bool enable_cryptomb = 1;
+
+    google.protobuf.Duration pool_delay = 2;
+
+    bool enable_qat = 3;
+  }
+
+  CryptombPrivateKeyConfig cryptomb_config = 1001;
+  
+  MSEIngressGlobalConfig mse_ingress_global_config = 1002;
+  // End add by ingress
+
   message TLSConfig {
     // TLS protocol versions.
     enum TLSProtocol {
@@ -1167,10 +1181,6 @@ message MeshConfig {
   // Currently, this supports configuration of ecdh_curves only.
   // For ISTIO_MUTUAL TLS settings, use meshMTLS configuration.
   TLSConfig tls_defaults = 64;
-
-  // Added by ingress
-  MSEIngressGlobalConfig mse_ingress_global_config = 1002;
-  // End Added by ingress
 
   // $hide_from_docs
   // Next available field number: 66
@@ -1270,7 +1280,17 @@ message Certificate {
   repeated string dns_names = 2;
 }
 
+// Add by ingress
 message MSEIngressGlobalConfig {
+  message AccessLogFilter {
+    // The user should make sure the host following
+    // the re2 syntax if the host is wirecard.
+    string host = 1;
+
+    // Control the log whether or not log.
+    uint32 sample_rate = 2;
+  }
+
   // Control tls min protocol version for all gateways.
   string tls_min_protocol_version = 1;
 
@@ -1281,4 +1301,10 @@ message MSEIngressGlobalConfig {
   repeated string tls_cipher_suites = 3;
 
   google.protobuf.Duration upstream_idle_timeout = 4;
+
+  bool enable_h3 = 5;
+
+  repeated AccessLogFilter access_log_filters = 6;
+
+  bool enable_proxy_protocol = 7;
 }
