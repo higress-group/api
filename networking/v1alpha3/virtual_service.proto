@@ -597,13 +597,9 @@ message HTTPRoute {
   // without notifying downstream.
   HTTPInternalActiveRedirect internal_active_redirect = 25;
 
-
-  // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
-  // Direct Response is used to specify a fixed response that should
-  // be sent to clients.
-  //
-  // It can be set only when `Route` and `Redirect` are empty.
-  HTTPDirectResponse direct_response = 21;
+  // Added by ingress
+  // Return an arbitrary HTTP response directly, without proxying.
+  HTTPDirectResponse direct_response = 26;
 
   // Delegate is used to specify the particular VirtualService which
   // can be used to define delegate HTTPRoute.
@@ -1638,23 +1634,58 @@ message HTTPRedirect {
 // {{</tab>}}
 // {{</tabset>}}
 //
-message HTTPDirectResponse {
-  // Specifies the HTTP response status to be returned.
-  uint32 status = 1 [(google.api.field_behavior) = REQUIRED];
+// More detail information, please see envoy document about InternalRedirectPolicy.
+// The only difference is that this redirect policy allow user to specify how to control the redirect url.
+message HTTPInternalActiveRedirect {
+  uint32 max_internal_redirects = 1;
+  // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
+  repeated uint32 redirect_response_codes = 2;
+  oneof redirect_url_rewrite_specifier {
+    string redirect_url = 3;
+    RegexMatchAndSubstitute redirect_url_rewrite_regex = 4;
+  }
+  bool allow_cross_scheme = 5;
+  // Currently, only support for the add operation for request header.
+  Headers headers = 6;
 
-  // Specifies the content of the response body. If this setting is omitted,
-  // no body is included in the generated response.
-  HTTPBody body = 2;
+  // During internal redirect, rewrite the Authority/Host header with this value.
+  string authority = 7;
+
+  // If true, the host name in the downstream request is used for redirection.
+  bool forced_use_original_host = 16;
+
+  bool forced_add_header_before_route_matcher = 17;
+
+  message RedirectPolicy {
+    uint32 max_internal_redirects = 8;
+    // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
+    repeated uint32 redirect_response_codes = 9;
+    oneof redirect_url_rewrite_specifier {
+      string redirect_url = 10;
+      RegexMatchAndSubstitute redirect_url_rewrite_regex = 11;
+    }
+    bool allow_cross_scheme = 12;
+    // Currently, only support for the add operation for request header.
+    Headers headers = 13;
+
+    // During internal redirect, rewrite the Authority/Host header with this value.
+    string authority = 14;
+
+    // If true, the host name in the downstream request is used for redirection.
+    bool forced_use_original_host = 17;
+
+    bool forced_add_header_before_route_matcher = 18;
+  }
+  repeated RedirectPolicy policies = 15;
 }
 
-message HTTPBody {
-  oneof specifier {
-    // response body as a string
-    string string = 1;
-
-    // response body as base64 encoded bytes.
-    bytes bytes = 2;
-  }
+// Added by ingress
+// Return an arbitrary HTTP response directly, without proxying.
+message HTTPDirectResponse {
+  // Response code for downstream client.
+  uint32 response_code = 1;
+  // TODO Support filename, bytes or not
+  string body = 2;
 }
 
 // HTTPRewrite can be used to rewrite specific parts of a HTTP request
@@ -1720,6 +1751,12 @@ message HTTPRewrite {
 
   // rewrite the path portion of the URI with the specified regex.
   RegexRewrite uri_regex_rewrite = 3;
+
+
+  // uri_regex can be used for rewriting portions of path that match the
+  // pattern during forwarding the request
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  RegexMatchAndSubstitute uri_regex = 4;
 }
 
 message RegexRewrite {
@@ -2143,52 +2180,6 @@ message PortSelector {
 // Percent specifies a percentage in the range of [0.0, 100.0].
 message Percent {
   double value = 1;
-}
-
-// Added by ingress
-// More detail information, please see envoy document about InternalRedirectPolicy.
-// The only difference is that this redirect policy allow user to specify how to control the redirect url.
-message HTTPInternalActiveRedirect {
-  uint32 max_internal_redirects = 1;
-  // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
-  repeated uint32 redirect_response_codes = 2;
-  oneof redirect_url_rewrite_specifier {
-    string redirect_url = 3;
-    RegexMatchAndSubstitute redirect_url_rewrite_regex = 4;
-  }
-  bool allow_cross_scheme = 5;
-  // Currently, only support for the add operation for request header.
-  Headers headers = 6;
-
-  // During internal redirect, rewrite the Authority/Host header with this value.
-  string authority = 7;
-
-  // If true, the host name in the downstream request is used for redirection.
-  bool forced_use_original_host = 16;
-
-  bool forced_add_header_before_route_matcher = 17;
-
-  message RedirectPolicy {
-    uint32 max_internal_redirects = 8;
-    // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
-    repeated uint32 redirect_response_codes = 9;
-    oneof redirect_url_rewrite_specifier {
-      string redirect_url = 10;
-      RegexMatchAndSubstitute redirect_url_rewrite_regex = 11;
-    }
-    bool allow_cross_scheme = 12;
-    // Currently, only support for the add operation for request header.
-    Headers headers = 13;
-
-    // During internal redirect, rewrite the Authority/Host header with this value.
-    string authority = 14;
-
-    // If true, the host name in the downstream request is used for redirection.
-    bool forced_use_original_host = 17;
-
-    bool forced_add_header_before_route_matcher = 18;
-  }
-  repeated RedirectPolicy policies = 15;
 }
 
 // Describes how to match a string and then produce a new string using a regular

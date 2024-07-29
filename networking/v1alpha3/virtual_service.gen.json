@@ -88,73 +88,17 @@
           }
         }
       },
-      "istio.networking.v1alpha3.HTTPBody": {
-        "type": "object",
-        "oneOf": [
-          {
-            "not": {
-              "anyOf": [
-                {
-                  "required": [
-                    "string"
-                  ],
-                  "properties": {
-                    "string": {
-                      "description": "response body as a string",
-                      "type": "string"
-                    }
-                  }
-                },
-                {
-                  "required": [
-                    "bytes"
-                  ],
-                  "properties": {
-                    "bytes": {
-                      "description": "response body as base64 encoded bytes.",
-                      "type": "string",
-                      "format": "binary"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "required": [
-              "string"
-            ],
-            "properties": {
-              "string": {
-                "description": "response body as a string",
-                "type": "string"
-              }
-            }
-          },
-          {
-            "required": [
-              "bytes"
-            ],
-            "properties": {
-              "bytes": {
-                "description": "response body as base64 encoded bytes.",
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        ]
-      },
       "istio.networking.v1alpha3.HTTPDirectResponse": {
-        "description": "HTTPDirectResponse can be used to send a fixed response to clients. For example, the following rule returns a fixed 503 status with a body to requests for /v1/getProductRatings API.",
+        "description": "Added by ingress Return an arbitrary HTTP response directly, without proxying.",
         "type": "object",
         "properties": {
-          "status": {
-            "description": "Specifies the HTTP response status to be returned.",
+          "responseCode": {
+            "description": "Response code for downstream client.",
             "type": "integer"
           },
           "body": {
-            "$ref": "#/components/schemas/istio.networking.v1alpha3.HTTPBody"
+            "description": "TODO Support filename, bytes or not",
+            "type": "string"
           }
         }
       },
@@ -380,7 +324,7 @@
         ]
       },
       "istio.networking.v1alpha3.HTTPInternalActiveRedirect": {
-        "description": "Added by ingress More detail information, please see envoy document about InternalRedirectPolicy. The only difference is that this redirect policy allow user to specify how to control the redirect url.",
+        "description": "HTTPDirectResponse can be used to send a fixed response to clients. For example, the following rule returns a fixed 503 status with a body to requests for /v1/getProductRatings API.",
         "type": "object",
         "properties": {
           "maxInternalRedirects": {
@@ -748,6 +692,9 @@
           },
           "uriRegexRewrite": {
             "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexRewrite"
+          },
+          "uriRegex": {
+            "$ref": "#/components/schemas/istio.networking.v1alpha3.RegexMatchAndSubstitute"
           }
         }
       },

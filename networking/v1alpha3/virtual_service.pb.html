@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 35
+number_of_entries: 34
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -673,10 +673,8 @@ No
 <td><code>directResponse</code></td>
 <td><code><a href="#HTTPDirectResponse">HTTPDirectResponse</a></code></td>
 <td>
-<p>A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
-Direct Response is used to specify a fixed response that should
-be sent to clients.</p>
-<p>It can be set only when <code>Route</code> and <code>Redirect</code> are empty.</p>
+<p>Added by ingress
+Return an arbitrary HTTP response directly, without proxying.</p>
 
 </td>
 <td>
@@ -2067,7 +2065,7 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="HTTPDirectResponse">HTTPDirectResponse</h2>
+<h2 id="HTTPInternalActiveRedirect">HTTPInternalActiveRedirect</h2>
 <section>
 <p>HTTPDirectResponse can be used to send a fixed response to clients.
 For example, the following rule returns a fixed 503 status with a body
@@ -2205,6 +2203,8 @@ spec:
 </code></pre>
 <p>{{</tab>}}
 {{</tabset>}}</p>
+<p>More detail information, please see envoy document about InternalRedirectPolicy.
+The only difference is that this redirect policy allow user to specify how to control the redirect url.</p>
 
 <table class="message-fields">
 <thead>
@@ -2216,24 +2216,99 @@ spec:
 </tr>
 </thead>
 <tbody>
-<tr id="HTTPDirectResponse-status">
-<td><code>status</code></td>
+<tr id="HTTPInternalActiveRedirect-max_internal_redirects">
+<td><code>maxInternalRedirects</code></td>
 <td><code>uint32</code></td>
 <td>
-<p>Specifies the HTTP response status to be returned.</p>
-
 </td>
 <td>
-Yes
+No
 </td>
 </tr>
-<tr id="HTTPDirectResponse-body">
-<td><code>body</code></td>
-<td><code><a href="#HTTPBody">HTTPBody</a></code></td>
+<tr id="HTTPInternalActiveRedirect-redirect_response_codes">
+<td><code>redirectResponseCodes</code></td>
+<td><code>uint32[]</code></td>
 <td>
-<p>Specifies the content of the response body. If this setting is omitted,
-no body is included in the generated response.</p>
+<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
 
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-redirect_url" class="oneof oneof-start">
+<td><code>redirectUrl</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-redirect_url_rewrite_regex" class="oneof">
+<td><code>redirectUrlRewriteRegex</code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-allow_cross_scheme">
+<td><code>allowCrossScheme</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-headers">
+<td><code>headers</code></td>
+<td><code><a href="#Headers">Headers</a></code></td>
+<td>
+<p>Currently, only support for the add operation for request header.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-authority">
+<td><code>authority</code></td>
+<td><code>string</code></td>
+<td>
+<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-forced_use_original_host">
+<td><code>forcedUseOriginalHost</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, the host name in the downstream request is used for redirection.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-forced_add_header_before_route_matcher">
+<td><code>forcedAddHeaderBeforeRouteMatcher</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-policies">
+<td><code>policies</code></td>
+<td><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy">RedirectPolicy[]</a></code></td>
+<td>
 </td>
 <td>
 No
@@ -2242,8 +2317,11 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="HTTPBody">HTTPBody</h2>
+<h2 id="HTTPDirectResponse">HTTPDirectResponse</h2>
 <section>
+<p>Added by ingress
+Return an arbitrary HTTP response directly, without proxying.</p>
+
 <table class="message-fields">
 <thead>
 <tr>
@@ -2254,22 +2332,22 @@ No
 </tr>
 </thead>
 <tbody>
-<tr id="HTTPBody-string" class="oneof oneof-start">
-<td><code>string</code></td>
-<td><code>string (oneof)</code></td>
+<tr id="HTTPDirectResponse-response_code">
+<td><code>responseCode</code></td>
+<td><code>uint32</code></td>
 <td>
-<p>response body as a string</p>
+<p>Response code for downstream client.</p>
 
 </td>
 <td>
 No
 </td>
 </tr>
-<tr id="HTTPBody-bytes" class="oneof">
-<td><code>bytes</code></td>
-<td><code>bytes (oneof)</code></td>
+<tr id="HTTPDirectResponse-body">
+<td><code>body</code></td>
+<td><code>string</code></td>
 <td>
-<p>response body as base64 encoded bytes.</p>
+<p>TODO Support filename, bytes or not</p>
 
 </td>
 <td>
@@ -2368,6 +2446,19 @@ No
 <td><code><a href="#RegexRewrite">RegexRewrite</a></code></td>
 <td>
 <p>rewrite the path portion of the URI with the specified regex.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPRewrite-uri_regex">
+<td><code>uriRegex</code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute</a></code></td>
+<td>
+<p>uri_regex can be used for rewriting portions of path that match the
+pattern during forwarding the request
+RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
 
 </td>
 <td>
@@ -2841,123 +2932,6 @@ No
 </tbody>
 </table>
 </section>
-<h2 id="HTTPInternalActiveRedirect">HTTPInternalActiveRedirect</h2>
-<section>
-<p>Added by ingress
-More detail information, please see envoy document about InternalRedirectPolicy.
-The only difference is that this redirect policy allow user to specify how to control the redirect url.</p>
-
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="HTTPInternalActiveRedirect-max_internal_redirects">
-<td><code>maxInternalRedirects</code></td>
-<td><code>uint32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-redirect_response_codes">
-<td><code>redirectResponseCodes</code></td>
-<td><code>uint32[]</code></td>
-<td>
-<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-redirect_url" class="oneof oneof-start">
-<td><code>redirectUrl</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-redirect_url_rewrite_regex" class="oneof">
-<td><code>redirectUrlRewriteRegex</code></td>
-<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-allow_cross_scheme">
-<td><code>allowCrossScheme</code></td>
-<td><code>bool</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-headers">
-<td><code>headers</code></td>
-<td><code><a href="#Headers">Headers</a></code></td>
-<td>
-<p>Currently, only support for the add operation for request header.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-authority">
-<td><code>authority</code></td>
-<td><code>string</code></td>
-<td>
-<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-forced_use_original_host">
-<td><code>forcedUseOriginalHost</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If true, the host name in the downstream request is used for redirection.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-forced_add_header_before_route_matcher">
-<td><code>forcedAddHeaderBeforeRouteMatcher</code></td>
-<td><code>bool</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-policies">
-<td><code>policies</code></td>
-<td><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy">RedirectPolicy[]</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
 <h2 id="RegexMatchAndSubstitute">RegexMatchAndSubstitute</h2>
 <section>
 <p>Describes how to match a string and then produce a new string using a regular
@@ -3229,6 +3203,110 @@ No
 </tbody>
 </table>
 </section>
+<h2 id="HTTPInternalActiveRedirect-RedirectPolicy">HTTPInternalActiveRedirect.RedirectPolicy</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-max_internal_redirects">
+<td><code>maxInternalRedirects</code></td>
+<td><code>uint32</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_response_codes">
+<td><code>redirectResponseCodes</code></td>
+<td><code>uint32[]</code></td>
+<td>
+<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url" class="oneof oneof-start">
+<td><code>redirectUrl</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url_rewrite_regex" class="oneof">
+<td><code>redirectUrlRewriteRegex</code></td>
+<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-allow_cross_scheme">
+<td><code>allowCrossScheme</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-headers">
+<td><code>headers</code></td>
+<td><code><a href="#Headers">Headers</a></code></td>
+<td>
+<p>Currently, only support for the add operation for request header.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-authority">
+<td><code>authority</code></td>
+<td><code>string</code></td>
+<td>
+<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_use_original_host">
+<td><code>forcedUseOriginalHost</code></td>
+<td><code>bool</code></td>
+<td>
+<p>If true, the host name in the downstream request is used for redirection.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_add_header_before_route_matcher">
+<td><code>forcedAddHeaderBeforeRouteMatcher</code></td>
+<td><code>bool</code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h2 id="HTTPFaultInjection-Delay">HTTPFaultInjection.Delay</h2>
 <section>
 <p>Delay specification is used to inject latency into the request
@@ -3431,110 +3509,6 @@ No
 <p>Percentage of requests to be aborted with the error code provided.
 If not specified, no request will be aborted.</p>
 
-</td>
-<td>
-No
-</td>
-</tr>
-</tbody>
-</table>
-</section>
-<h2 id="HTTPInternalActiveRedirect-RedirectPolicy">HTTPInternalActiveRedirect.RedirectPolicy</h2>
-<section>
-<table class="message-fields">
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-max_internal_redirects">
-<td><code>maxInternalRedirects</code></td>
-<td><code>uint32</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_response_codes">
-<td><code>redirectResponseCodes</code></td>
-<td><code>uint32[]</code></td>
-<td>
-<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url" class="oneof oneof-start">
-<td><code>redirectUrl</code></td>
-<td><code>string (oneof)</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url_rewrite_regex" class="oneof">
-<td><code>redirectUrlRewriteRegex</code></td>
-<td><code><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-allow_cross_scheme">
-<td><code>allowCrossScheme</code></td>
-<td><code>bool</code></td>
-<td>
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-headers">
-<td><code>headers</code></td>
-<td><code><a href="#Headers">Headers</a></code></td>
-<td>
-<p>Currently, only support for the add operation for request header.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-authority">
-<td><code>authority</code></td>
-<td><code>string</code></td>
-<td>
-<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_use_original_host">
-<td><code>forcedUseOriginalHost</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If true, the host name in the downstream request is used for redirection.</p>
-
-</td>
-<td>
-No
-</td>
-</tr>
-<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_add_header_before_route_matcher">
-<td><code>forcedAddHeaderBeforeRouteMatcher</code></td>
-<td><code>bool</code></td>
-<td>
 </td>
 <td>
 No

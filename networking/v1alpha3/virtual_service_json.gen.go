@@ -160,6 +160,28 @@ func (this *HTTPRedirect) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect
+func (this *HTTPInternalActiveRedirect) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect
+func (this *HTTPInternalActiveRedirect) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect_RedirectPolicy
+func (this *HTTPInternalActiveRedirect_RedirectPolicy) MarshalJSON() ([]byte, error) {
+	str, err := VirtualServiceMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect_RedirectPolicy
+func (this *HTTPInternalActiveRedirect_RedirectPolicy) UnmarshalJSON(b []byte) error {
+	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for HTTPDirectResponse
 func (this *HTTPDirectResponse) MarshalJSON() ([]byte, error) {
 	str, err := VirtualServiceMarshaler.MarshalToString(this)
@@ -168,17 +190,6 @@ func (this *HTTPDirectResponse) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for HTTPDirectResponse
 func (this *HTTPDirectResponse) UnmarshalJSON(b []byte) error {
-	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for HTTPBody
-func (this *HTTPBody) MarshalJSON() ([]byte, error) {
-	str, err := VirtualServiceMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for HTTPBody
-func (this *HTTPBody) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
@@ -300,28 +311,6 @@ func (this *Percent) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Percent
 func (this *Percent) UnmarshalJSON(b []byte) error {
-	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect
-func (this *HTTPInternalActiveRedirect) MarshalJSON() ([]byte, error) {
-	str, err := VirtualServiceMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect
-func (this *HTTPInternalActiveRedirect) UnmarshalJSON(b []byte) error {
-	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
-}
-
-// MarshalJSON is a custom marshaler for HTTPInternalActiveRedirect_RedirectPolicy
-func (this *HTTPInternalActiveRedirect_RedirectPolicy) MarshalJSON() ([]byte, error) {
-	str, err := VirtualServiceMarshaler.MarshalToString(this)
-	return []byte(str), err
-}
-
-// UnmarshalJSON is a custom unmarshaler for HTTPInternalActiveRedirect_RedirectPolicy
-func (this *HTTPInternalActiveRedirect_RedirectPolicy) UnmarshalJSON(b []byte) error {
 	return VirtualServiceUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
