@@ -7,7 +7,7 @@ generator: protoc-gen-docs
 schema: istio.security.v1beta1.AuthorizationPolicy
 weight: 20
 aliases: [/docs/reference/config/authorization/authorization-policy]
-number_of_entries: 9
+number_of_entries: 10
 ---
 <p>Istio Authorization Policy enables access control on workloads in the mesh.</p>
 <p>Authorization policy supports CUSTOM, DENY and ALLOW actions for access control. When CUSTOM, DENY and ALLOW actions
@@ -766,6 +766,24 @@ No
 No
 </td>
 </tr>
+<tr id="Operation-extension_paths">
+<td><code>extensionPaths</code></td>
+<td><code><a href="#StringMatch">StringMatch[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="Operation-extension_not_paths">
+<td><code>extensionNotPaths</code></td>
+<td><code><a href="#StringMatch">StringMatch[]</a></code></td>
+<td>
+</td>
+<td>
+No
+</td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -813,6 +831,57 @@ No
 <td>
 <p>Optional. A list of negative match of values for the attribute.
 Note: at least one of values or not_values must be set.</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="StringMatch">StringMatch</h2>
+<section>
+<p>Describes how to match a given string in HTTP headers. Match is
+case-sensitive.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr id="StringMatch-exact" class="oneof oneof-start">
+<td><code>exact</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>exact string match</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatch-prefix" class="oneof">
+<td><code>prefix</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>prefix-based match</p>
+
+</td>
+<td>
+No
+</td>
+</tr>
+<tr id="StringMatch-regex" class="oneof">
+<td><code>regex</code></td>
+<td><code>string (oneof)</code></td>
+<td>
+<p>RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
 
 </td>
 <td>

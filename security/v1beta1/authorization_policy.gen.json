@@ -155,6 +155,18 @@
             "items": {
               "type": "string"
             }
+          },
+          "extensionPaths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.security.v1beta1.StringMatch"
+            }
+          },
+          "extensionNotPaths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/istio.security.v1beta1.StringMatch"
+            }
           }
         }
       },
@@ -278,6 +290,84 @@
             }
           }
         }
+      },
+      "istio.security.v1beta1.StringMatch": {
+        "description": "Describes how to match a given string in HTTP headers. Match is case-sensitive.",
+        "type": "object",
+        "oneOf": [
+          {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "exact"
+                  ],
+                  "properties": {
+                    "exact": {
+                      "description": "exact string match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "prefix"
+                  ],
+                  "properties": {
+                    "prefix": {
+                      "description": "prefix-based match",
+                      "type": "string"
+                    }
+                  }
+                },
+                {
+                  "required": [
+                    "regex"
+                  ],
+                  "properties": {
+                    "regex": {
+                      "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "exact"
+            ],
+            "properties": {
+              "exact": {
+                "description": "exact string match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "prefix"
+            ],
+            "properties": {
+              "prefix": {
+                "description": "prefix-based match",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "required": [
+              "regex"
+            ],
+            "properties": {
+              "regex": {
+                "description": "RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).",
+                "type": "string"
+              }
+            }
+          }
+        ]
       },
       "istio.type.v1beta1.WorkloadSelector": {
         "description": "WorkloadSelector specifies the criteria used to determine if a policy can be applied to a proxy. The matching criteria includes the metadata associated with a proxy, workload instance info such as labels attached to the pod/VM, or any other info that the proxy provides to Istio during the initial handshake. If multiple conditions are specified, all conditions need to match in order for the workload instance to be selected. Currently, only label based selection mechanism is supported.",
