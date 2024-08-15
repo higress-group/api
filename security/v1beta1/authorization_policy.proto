@@ -692,6 +692,10 @@ message Operation {
 
   // Optional. A list of negative match of paths.
   repeated string not_paths = 8;
+
+  repeated StringMatch extension_paths = 1000;
+
+  repeated StringMatch extension_not_paths = 1001;
 }
 
 // Condition specifies additional required attributes.
@@ -707,4 +711,20 @@ message Condition {
   // Optional. A list of negative match of values for the attribute.
   // Note: at least one of values or not_values must be set.
   repeated string not_values = 3;
+}
+
+// Describes how to match a given string in HTTP headers. Match is
+// case-sensitive.
+message StringMatch {
+  oneof match_type {
+
+    // exact string match
+    string exact = 1;
+
+    // prefix-based match
+    string prefix = 2;
+
+    // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+    string regex = 3;
+  }
 }

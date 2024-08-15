@@ -960,7 +960,9 @@ type Operation struct {
 	// If not set, any path is allowed. Must be used only with HTTP.
 	Paths []string `protobuf:"bytes,4,rep,name=paths,proto3" json:"paths,omitempty"`
 	// Optional. A list of negative match of paths.
-	NotPaths []string `protobuf:"bytes,8,rep,name=not_paths,json=notPaths,proto3" json:"not_paths,omitempty"`
+	NotPaths          []string       `protobuf:"bytes,8,rep,name=not_paths,json=notPaths,proto3" json:"not_paths,omitempty"`
+	ExtensionPaths    []*StringMatch `protobuf:"bytes,1000,rep,name=extension_paths,json=extensionPaths,proto3" json:"extension_paths,omitempty"`
+	ExtensionNotPaths []*StringMatch `protobuf:"bytes,1001,rep,name=extension_not_paths,json=extensionNotPaths,proto3" json:"extension_not_paths,omitempty"`
 }
 
 func (x *Operation) Reset() {
@@ -1051,6 +1053,20 @@ func (x *Operation) GetNotPaths() []string {
 	return nil
 }
 
+func (x *Operation) GetExtensionPaths() []*StringMatch {
+	if x != nil {
+		return x.ExtensionPaths
+	}
+	return nil
+}
+
+func (x *Operation) GetExtensionNotPaths() []*StringMatch {
+	if x != nil {
+		return x.ExtensionNotPaths
+	}
+	return nil
+}
+
 // Condition specifies additional required attributes.
 type Condition struct {
 	state         protoimpl.MessageState
@@ -1121,6 +1137,106 @@ func (x *Condition) GetNotValues() []string {
 	return nil
 }
 
+// Describes how to match a given string in HTTP headers. Match is
+// case-sensitive.
+type StringMatch struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Types that are assignable to MatchType:
+	//
+	//	*StringMatch_Exact
+	//	*StringMatch_Prefix
+	//	*StringMatch_Regex
+	MatchType isStringMatch_MatchType `protobuf_oneof:"match_type"`
+}
+
+func (x *StringMatch) Reset() {
+	*x = StringMatch{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StringMatch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StringMatch) ProtoMessage() {}
+
+func (x *StringMatch) ProtoReflect() protoreflect.Message {
+	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StringMatch.ProtoReflect.Descriptor instead.
+func (*StringMatch) Descriptor() ([]byte, []int) {
+	return file_security_v1beta1_authorization_policy_proto_rawDescGZIP(), []int{5}
+}
+
+func (m *StringMatch) GetMatchType() isStringMatch_MatchType {
+	if m != nil {
+		return m.MatchType
+	}
+	return nil
+}
+
+func (x *StringMatch) GetExact() string {
+	if x, ok := x.GetMatchType().(*StringMatch_Exact); ok {
+		return x.Exact
+	}
+	return ""
+}
+
+func (x *StringMatch) GetPrefix() string {
+	if x, ok := x.GetMatchType().(*StringMatch_Prefix); ok {
+		return x.Prefix
+	}
+	return ""
+}
+
+func (x *StringMatch) GetRegex() string {
+	if x, ok := x.GetMatchType().(*StringMatch_Regex); ok {
+		return x.Regex
+	}
+	return ""
+}
+
+type isStringMatch_MatchType interface {
+	isStringMatch_MatchType()
+}
+
+type StringMatch_Exact struct {
+	// exact string match
+	Exact string `protobuf:"bytes,1,opt,name=exact,proto3,oneof"`
+}
+
+type StringMatch_Prefix struct {
+	// prefix-based match
+	Prefix string `protobuf:"bytes,2,opt,name=prefix,proto3,oneof"`
+}
+
+type StringMatch_Regex struct {
+	// RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+	Regex string `protobuf:"bytes,3,opt,name=regex,proto3,oneof"`
+}
+
+func (*StringMatch_Exact) isStringMatch_MatchType() {}
+
+func (*StringMatch_Prefix) isStringMatch_MatchType() {}
+
+func (*StringMatch_Regex) isStringMatch_MatchType() {}
+
 type AuthorizationPolicy_ExtensionProvider struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1134,7 +1250,7 @@ type AuthorizationPolicy_ExtensionProvider struct {
 func (x *AuthorizationPolicy_ExtensionProvider) Reset() {
 	*x = AuthorizationPolicy_ExtensionProvider{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[5]
+		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1147,7 +1263,7 @@ func (x *AuthorizationPolicy_ExtensionProvider) String() string {
 func (*AuthorizationPolicy_ExtensionProvider) ProtoMessage() {}
 
 func (x *AuthorizationPolicy_ExtensionProvider) ProtoReflect() protoreflect.Message {
-	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[5]
+	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1183,7 +1299,7 @@ type Rule_From struct {
 func (x *Rule_From) Reset() {
 	*x = Rule_From{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[6]
+		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1196,7 +1312,7 @@ func (x *Rule_From) String() string {
 func (*Rule_From) ProtoMessage() {}
 
 func (x *Rule_From) ProtoReflect() protoreflect.Message {
-	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[6]
+	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1232,7 +1348,7 @@ type Rule_To struct {
 func (x *Rule_To) Reset() {
 	*x = Rule_To{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[7]
+		mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1245,7 +1361,7 @@ func (x *Rule_To) String() string {
 func (*Rule_To) ProtoMessage() {}
 
 func (x *Rule_To) ProtoReflect() protoreflect.Message {
-	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[7]
+	mi := &file_security_v1beta1_authorization_policy_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1350,7 +1466,7 @@ var file_security_v1beta1_authorization_policy_proto_rawDesc = []byte{
 	0x6b, 0x73, 0x12, 0x2f, 0x0a, 0x14, 0x6e, 0x6f, 0x74, 0x5f, 0x72, 0x65, 0x6d, 0x6f, 0x74, 0x65,
 	0x5f, 0x69, 0x70, 0x5f, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x09,
 	0x52, 0x11, 0x6e, 0x6f, 0x74, 0x52, 0x65, 0x6d, 0x6f, 0x74, 0x65, 0x49, 0x70, 0x42, 0x6c, 0x6f,
-	0x63, 0x6b, 0x73, 0x22, 0xdf, 0x01, 0x0a, 0x09, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f,
+	0x63, 0x6b, 0x73, 0x22, 0x84, 0x03, 0x0a, 0x09, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x12, 0x14, 0x0a, 0x05, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09,
 	0x52, 0x05, 0x68, 0x6f, 0x73, 0x74, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x6f, 0x74, 0x5f, 0x68,
 	0x6f, 0x73, 0x74, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x6f, 0x74, 0x48,
@@ -1364,15 +1480,32 @@ var file_security_v1beta1_authorization_policy_proto_rawDesc = []byte{
 	0x64, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x70, 0x61, 0x74, 0x68, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28,
 	0x09, 0x52, 0x05, 0x70, 0x61, 0x74, 0x68, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x6e, 0x6f, 0x74, 0x5f,
 	0x70, 0x61, 0x74, 0x68, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x6f, 0x74,
-	0x50, 0x61, 0x74, 0x68, 0x73, 0x22, 0x59, 0x0a, 0x09, 0x43, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x15, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x03, 0xe0, 0x41, 0x02, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x16, 0x0a, 0x06, 0x76, 0x61, 0x6c,
-	0x75, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x76, 0x61, 0x6c, 0x75, 0x65,
-	0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x6e, 0x6f, 0x74, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18,
-	0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x6f, 0x74, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x73,
-	0x42, 0x1f, 0x5a, 0x1d, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
-	0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x50, 0x61, 0x74, 0x68, 0x73, 0x12, 0x4d, 0x0a, 0x0f, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69,
+	0x6f, 0x6e, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x73, 0x18, 0xe8, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x23, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79,
+	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x4d,
+	0x61, 0x74, 0x63, 0x68, 0x52, 0x0e, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f, 0x6e, 0x50,
+	0x61, 0x74, 0x68, 0x73, 0x12, 0x54, 0x0a, 0x13, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69, 0x6f,
+	0x6e, 0x5f, 0x6e, 0x6f, 0x74, 0x5f, 0x70, 0x61, 0x74, 0x68, 0x73, 0x18, 0xe9, 0x07, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x23, 0x2e, 0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x73, 0x65, 0x63, 0x75, 0x72,
+	0x69, 0x74, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x53, 0x74, 0x72, 0x69,
+	0x6e, 0x67, 0x4d, 0x61, 0x74, 0x63, 0x68, 0x52, 0x11, 0x65, 0x78, 0x74, 0x65, 0x6e, 0x73, 0x69,
+	0x6f, 0x6e, 0x4e, 0x6f, 0x74, 0x50, 0x61, 0x74, 0x68, 0x73, 0x22, 0x59, 0x0a, 0x09, 0x43, 0x6f,
+	0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x15, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x03, 0xe0, 0x41, 0x02, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x16,
+	0x0a, 0x06, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06,
+	0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x6e, 0x6f, 0x74, 0x5f, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x6f, 0x74, 0x56,
+	0x61, 0x6c, 0x75, 0x65, 0x73, 0x22, 0x65, 0x0a, 0x0b, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x4d,
+	0x61, 0x74, 0x63, 0x68, 0x12, 0x16, 0x0a, 0x05, 0x65, 0x78, 0x61, 0x63, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x65, 0x78, 0x61, 0x63, 0x74, 0x12, 0x18, 0x0a, 0x06,
+	0x70, 0x72, 0x65, 0x66, 0x69, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x06,
+	0x70, 0x72, 0x65, 0x66, 0x69, 0x78, 0x12, 0x16, 0x0a, 0x05, 0x72, 0x65, 0x67, 0x65, 0x78, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x72, 0x65, 0x67, 0x65, 0x78, 0x42, 0x0c,
+	0x0a, 0x0a, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x42, 0x1f, 0x5a, 0x1d,
+	0x69, 0x73, 0x74, 0x69, 0x6f, 0x2e, 0x69, 0x6f, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x73, 0x65, 0x63,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1388,7 +1521,7 @@ func file_security_v1beta1_authorization_policy_proto_rawDescGZIP() []byte {
 }
 
 var file_security_v1beta1_authorization_policy_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_security_v1beta1_authorization_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_security_v1beta1_authorization_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_security_v1beta1_authorization_policy_proto_goTypes = []interface{}{
 	(AuthorizationPolicy_Action)(0),               // 0: istio.security.v1beta1.AuthorizationPolicy.Action
 	(*AuthorizationPolicy)(nil),                   // 1: istio.security.v1beta1.AuthorizationPolicy
@@ -1396,26 +1529,29 @@ var file_security_v1beta1_authorization_policy_proto_goTypes = []interface{}{
 	(*Source)(nil),                                // 3: istio.security.v1beta1.Source
 	(*Operation)(nil),                             // 4: istio.security.v1beta1.Operation
 	(*Condition)(nil),                             // 5: istio.security.v1beta1.Condition
-	(*AuthorizationPolicy_ExtensionProvider)(nil), // 6: istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider
-	(*Rule_From)(nil),                             // 7: istio.security.v1beta1.Rule.From
-	(*Rule_To)(nil),                               // 8: istio.security.v1beta1.Rule.To
-	(*v1beta1.WorkloadSelector)(nil),              // 9: istio.type.v1beta1.WorkloadSelector
+	(*StringMatch)(nil),                           // 6: istio.security.v1beta1.StringMatch
+	(*AuthorizationPolicy_ExtensionProvider)(nil), // 7: istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider
+	(*Rule_From)(nil),                             // 8: istio.security.v1beta1.Rule.From
+	(*Rule_To)(nil),                               // 9: istio.security.v1beta1.Rule.To
+	(*v1beta1.WorkloadSelector)(nil),              // 10: istio.type.v1beta1.WorkloadSelector
 }
 var file_security_v1beta1_authorization_policy_proto_depIdxs = []int32{
-	9, // 0: istio.security.v1beta1.AuthorizationPolicy.selector:type_name -> istio.type.v1beta1.WorkloadSelector
-	2, // 1: istio.security.v1beta1.AuthorizationPolicy.rules:type_name -> istio.security.v1beta1.Rule
-	0, // 2: istio.security.v1beta1.AuthorizationPolicy.action:type_name -> istio.security.v1beta1.AuthorizationPolicy.Action
-	6, // 3: istio.security.v1beta1.AuthorizationPolicy.provider:type_name -> istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider
-	7, // 4: istio.security.v1beta1.Rule.from:type_name -> istio.security.v1beta1.Rule.From
-	8, // 5: istio.security.v1beta1.Rule.to:type_name -> istio.security.v1beta1.Rule.To
-	5, // 6: istio.security.v1beta1.Rule.when:type_name -> istio.security.v1beta1.Condition
-	3, // 7: istio.security.v1beta1.Rule.From.source:type_name -> istio.security.v1beta1.Source
-	4, // 8: istio.security.v1beta1.Rule.To.operation:type_name -> istio.security.v1beta1.Operation
-	9, // [9:9] is the sub-list for method output_type
-	9, // [9:9] is the sub-list for method input_type
-	9, // [9:9] is the sub-list for extension type_name
-	9, // [9:9] is the sub-list for extension extendee
-	0, // [0:9] is the sub-list for field type_name
+	10, // 0: istio.security.v1beta1.AuthorizationPolicy.selector:type_name -> istio.type.v1beta1.WorkloadSelector
+	2,  // 1: istio.security.v1beta1.AuthorizationPolicy.rules:type_name -> istio.security.v1beta1.Rule
+	0,  // 2: istio.security.v1beta1.AuthorizationPolicy.action:type_name -> istio.security.v1beta1.AuthorizationPolicy.Action
+	7,  // 3: istio.security.v1beta1.AuthorizationPolicy.provider:type_name -> istio.security.v1beta1.AuthorizationPolicy.ExtensionProvider
+	8,  // 4: istio.security.v1beta1.Rule.from:type_name -> istio.security.v1beta1.Rule.From
+	9,  // 5: istio.security.v1beta1.Rule.to:type_name -> istio.security.v1beta1.Rule.To
+	5,  // 6: istio.security.v1beta1.Rule.when:type_name -> istio.security.v1beta1.Condition
+	6,  // 7: istio.security.v1beta1.Operation.extension_paths:type_name -> istio.security.v1beta1.StringMatch
+	6,  // 8: istio.security.v1beta1.Operation.extension_not_paths:type_name -> istio.security.v1beta1.StringMatch
+	3,  // 9: istio.security.v1beta1.Rule.From.source:type_name -> istio.security.v1beta1.Source
+	4,  // 10: istio.security.v1beta1.Rule.To.operation:type_name -> istio.security.v1beta1.Operation
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_security_v1beta1_authorization_policy_proto_init() }
@@ -1485,7 +1621,7 @@ func file_security_v1beta1_authorization_policy_proto_init() {
 			}
 		}
 		file_security_v1beta1_authorization_policy_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AuthorizationPolicy_ExtensionProvider); i {
+			switch v := v.(*StringMatch); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1497,7 +1633,7 @@ func file_security_v1beta1_authorization_policy_proto_init() {
 			}
 		}
 		file_security_v1beta1_authorization_policy_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Rule_From); i {
+			switch v := v.(*AuthorizationPolicy_ExtensionProvider); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1509,6 +1645,18 @@ func file_security_v1beta1_authorization_policy_proto_init() {
 			}
 		}
 		file_security_v1beta1_authorization_policy_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Rule_From); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_security_v1beta1_authorization_policy_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Rule_To); i {
 			case 0:
 				return &v.state
@@ -1524,13 +1672,18 @@ func file_security_v1beta1_authorization_policy_proto_init() {
 	file_security_v1beta1_authorization_policy_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*AuthorizationPolicy_Provider)(nil),
 	}
+	file_security_v1beta1_authorization_policy_proto_msgTypes[5].OneofWrappers = []interface{}{
+		(*StringMatch_Exact)(nil),
+		(*StringMatch_Prefix)(nil),
+		(*StringMatch_Regex)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_security_v1beta1_authorization_policy_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
