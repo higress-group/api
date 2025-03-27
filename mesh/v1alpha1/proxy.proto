@@ -547,6 +547,9 @@ message ProxyConfig {
 
     // Proxy stats name regexps matcher for inclusion.
     repeated string inclusion_regexps = 3;
+
+    // Proxy stats name regexps matcher for exclusion.
+    repeated string exclusion_regexps = 4;
   }
 
   // Proxy stats matcher defines configuration for reporting custom Envoy stats.

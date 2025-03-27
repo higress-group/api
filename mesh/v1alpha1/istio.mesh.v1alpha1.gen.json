@@ -1896,6 +1896,13 @@
             "items": {
               "type": "string"
             }
+          },
+          "exclusionRegexps": {
+            "description": "Proxy stats name regexps matcher for exclusion.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
