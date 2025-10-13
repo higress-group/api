@@ -867,3 +867,23 @@ type PortSelector = v1alpha3.PortSelector
 
 // Percent specifies a percentage in the range of [0.0, 100.0].
 type Percent = v1alpha3.Percent
+
+// Added by ingress
+// More detail information, please see envoy document about InternalRedirectPolicy.
+// The only difference is that this redirect policy allow user to specify how to control the redirect url.
+type HTTPInternalActiveRedirect = v1alpha3.HTTPInternalActiveRedirect
+type HTTPInternalActiveRedirect_RedirectPolicy = v1alpha3.HTTPInternalActiveRedirect_RedirectPolicy
+type HTTPInternalActiveRedirect_RedirectPolicy_RedirectUrl = v1alpha3.HTTPInternalActiveRedirect_RedirectPolicy_RedirectUrl
+type HTTPInternalActiveRedirect_RedirectPolicy_RedirectUrlRewriteRegex = v1alpha3.HTTPInternalActiveRedirect_RedirectPolicy_RedirectUrlRewriteRegex
+type HTTPInternalActiveRedirect_RedirectUrl = v1alpha3.HTTPInternalActiveRedirect_RedirectUrl
+type HTTPInternalActiveRedirect_RedirectUrlRewriteRegex = v1alpha3.HTTPInternalActiveRedirect_RedirectUrlRewriteRegex
+
+// Describes how to match a string and then produce a new string using a regular
+// expression and a substitution string.
+type RegexMatchAndSubstitute = v1alpha3.RegexMatchAndSubstitute
+type HTTPFilter = v1alpha3.HTTPFilter
+type HTTPFilter_IpAccessControl = v1alpha3.HTTPFilter_IpAccessControl
+type HTTPFilter_LocalRateLimit = v1alpha3.HTTPFilter_LocalRateLimit
+type IPAccessControl = v1alpha3.IPAccessControl
+type LocalRateLimit = v1alpha3.LocalRateLimit
+type TokenBucket = v1alpha3.TokenBucket

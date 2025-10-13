@@ -130,3 +130,16 @@ type Operation = v1beta1.Operation
 
 // Condition specifies additional required attributes.
 type Condition = v1beta1.Condition
+
+// Describes how to match a given string in HTTP headers. Match is
+// case-sensitive.
+type StringMatch = v1beta1.StringMatch
+
+// exact string match
+type StringMatch_Exact = v1beta1.StringMatch_Exact
+
+// prefix-based match
+type StringMatch_Prefix = v1beta1.StringMatch_Prefix
+
+// RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+type StringMatch_Regex = v1beta1.StringMatch_Regex

@@ -192,6 +192,9 @@ message VirtualService {
   // gateways and sidecars, specify `mesh` as one of the gateway names.
   repeated string gateways = 2;
 
+  // HTTP Filters for host scope.
+  repeated HTTPFilter hostHTTPFilters = 1000;
+
   // An ordered list of route rules for HTTP traffic. HTTP routes will be
   // applied to platform service ports using HTTP/HTTP2/GRPC protocols, gateway
   // ports with protocol HTTP/HTTP2/GRPC/TLS-terminated-HTTPS and service
@@ -407,11 +410,19 @@ message HTTPRoute {
   // service version determine the proportion of traffic it receives.
   repeated HTTPRouteDestination route = 2;
 
+  // HTTP Filters for route scope.
+  repeated HTTPFilter routeHTTPFilters = 1000;
+
   // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
   // If traffic passthrough option is specified in the rule,
   // route/redirect will be ignored. The redirect primitive can be used to
   // send a HTTP 301 redirect to a different URI or Authority.
   HTTPRedirect redirect = 3;
+
+  // Added by ingress
+  // This policy will trigger an internal redirect according to the response code
+  // without notifying downstream.
+  HTTPInternalActiveRedirect internal_active_redirect = 25;
 
   // A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
   // Direct Response is used to specify a fixed response that should
@@ -952,6 +963,9 @@ message HTTPRouteDestination {
 
   // Header manipulation rules
   Headers headers = 7;
+
+  // Added by ingress
+  repeated Destination fallback_clusters = 100;
 }
 
 // L4 routing rule weighted destination.
@@ -1573,4 +1587,96 @@ message PortSelector {
 // Percent specifies a percentage in the range of [0.0, 100.0].
 message Percent {
   double value = 1;
+}
+
+// Added by ingress
+// More detail information, please see envoy document about InternalRedirectPolicy.
+// The only difference is that this redirect policy allow user to specify how to control the redirect url.
+message HTTPInternalActiveRedirect {
+  uint32 max_internal_redirects = 1;
+  // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
+  repeated uint32 redirect_response_codes = 2;
+  oneof redirect_url_rewrite_specifier {
+    string redirect_url = 3;
+    RegexMatchAndSubstitute redirect_url_rewrite_regex = 4;
+  }
+  bool allow_cross_scheme = 5;
+  // Currently, only support for the add operation for request header.
+  Headers headers = 6;
+
+  // During internal redirect, rewrite the Authority/Host header with this value.
+  string authority = 7;
+
+  // If true, the host name in the downstream request is used for redirection.
+  bool forced_use_original_host = 16;
+
+  bool forced_add_header_before_route_matcher = 17;
+
+  message RedirectPolicy {
+    uint32 max_internal_redirects = 8;
+    // Invalid code is in [200, 301, 302, 303, 304, 307, 308]
+    repeated uint32 redirect_response_codes = 9;
+    oneof redirect_url_rewrite_specifier {
+      string redirect_url = 10;
+      RegexMatchAndSubstitute redirect_url_rewrite_regex = 11;
+    }
+    bool allow_cross_scheme = 12;
+    // Currently, only support for the add operation for request header.
+    Headers headers = 13;
+
+    // During internal redirect, rewrite the Authority/Host header with this value.
+    string authority = 14;
+
+    // If true, the host name in the downstream request is used for redirection.
+    bool forced_use_original_host = 17;
+
+    bool forced_add_header_before_route_matcher = 18;
+  }
+  repeated RedirectPolicy policies = 15;
+}
+
+// Describes how to match a string and then produce a new string using a regular
+// expression and a substitution string.
+message RegexMatchAndSubstitute {
+  // RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+  string pattern = 1;
+  // The string that should be substituted into matching portions of the
+  // subject string during a substitution operation to produce a new string.
+  string substitution = 2;
+}
+
+message HTTPFilter {
+  // The http filter name should be meaningful.
+  // E.g. ip-access-control, jwt, rbac, cors.
+  string name = 1;
+
+  // Disable this filter and all request will pass.
+  bool disable = 2;
+
+  oneof Filter {
+    IPAccessControl ip_access_control = 3;
+
+    LocalRateLimit local_rate_limit = 4;
+  }
+}
+
+message IPAccessControl {
+  // Used for white ip access control
+  repeated string remote_ip_blocks = 1;
+
+  // Used for black ip access control
+  repeated string not_remote_ip_blocks = 2;
+}
+
+message LocalRateLimit {
+  TokenBucket token_bucket = 1;
+  bool per_downstream_connection = 2;
+  // Default rate limit status code is 429.
+  uint32 status_code = 3;
+}
+
+message TokenBucket {
+  uint32 max_tokens = 1;
+  uint32 tokens_pef_fill = 2;
+  google.protobuf.Duration fill_interval = 3;
 }

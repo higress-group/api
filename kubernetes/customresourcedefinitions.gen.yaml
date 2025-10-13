@@ -10329,6 +10329,66 @@ spec:
                 items:
                   type: string
                 type: array
+              hostHTTPFilters:
+                description: HTTP Filters for host scope.
+                items:
+                  oneOf:
+                  - not:
+                      anyOf:
+                      - required:
+                        - ipAccessControl
+                      - required:
+                        - localRateLimit
+                  - required:
+                    - ipAccessControl
+                  - required:
+                    - localRateLimit
+                  properties:
+                    disable:
+                      description: Disable this filter and all request will pass.
+                      type: boolean
+                    ipAccessControl:
+                      properties:
+                        notRemoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                        remoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    localRateLimit:
+                      properties:
+                        perDownstreamConnection:
+                          type: boolean
+                        statusCode:
+                          description: Default rate limit status code is 429.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        tokenBucket:
+                          properties:
+                            fillInterval:
+                              type: string
+                              x-kubernetes-validations:
+                              - message: must be a valid duration greater than 1ms
+                                rule: duration(self) >= duration('1ms')
+                            maxTokens:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            tokensPefFill:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                    name:
+                      description: The http filter name should be meaningful.
+                      type: string
+                  type: object
+                type: array
               hosts:
                 description: The destination hosts to which traffic is being sent.
                 items:
@@ -10576,6 +10636,180 @@ spec:
                               additionalProperties:
                                 type: string
                               type: object
+                          type: object
+                      type: object
+                    internalActiveRedirect:
+                      description: Added by ingress This policy will trigger an internal
+                        redirect according to the response code without notifying
+                        downstream.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - redirectUrl
+                          - required:
+                            - redirectUrlRewriteRegex
+                      - required:
+                        - redirectUrl
+                      - required:
+                        - redirectUrlRewriteRegex
+                      properties:
+                        allowCrossScheme:
+                          type: boolean
+                        authority:
+                          description: During internal redirect, rewrite the Authority/Host
+                            header with this value.
+                          type: string
+                        forcedAddHeaderBeforeRouteMatcher:
+                          type: boolean
+                        forcedUseOriginalHost:
+                          description: If true, the host name in the downstream request
+                            is used for redirection.
+                          type: boolean
+                        headers:
+                          description: Currently, only support for the add operation
+                            for request header.
+                          properties:
+                            request:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            response:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                          type: object
+                        maxInternalRedirects:
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        policies:
+                          items:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - redirectUrl
+                                - required:
+                                  - redirectUrlRewriteRegex
+                            - required:
+                              - redirectUrl
+                            - required:
+                              - redirectUrlRewriteRegex
+                            properties:
+                              allowCrossScheme:
+                                type: boolean
+                              authority:
+                                description: During internal redirect, rewrite the
+                                  Authority/Host header with this value.
+                                type: string
+                              forcedAddHeaderBeforeRouteMatcher:
+                                type: boolean
+                              forcedUseOriginalHost:
+                                description: If true, the host name in the downstream
+                                  request is used for redirection.
+                                type: boolean
+                              headers:
+                                description: Currently, only support for the add operation
+                                  for request header.
+                                properties:
+                                  request:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                  response:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                type: object
+                              maxInternalRedirects:
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              redirectResponseCodes:
+                                items:
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                type: array
+                              redirectUrl:
+                                type: string
+                              redirectUrlRewriteRegex:
+                                properties:
+                                  pattern:
+                                    description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                    type: string
+                                  substitution:
+                                    description: The string that should be substituted
+                                      into matching portions of the subject string
+                                      during a substitution operation to produce a
+                                      new string.
+                                    type: string
+                                type: object
+                            type: object
+                          type: array
+                        redirectResponseCodes:
+                          items:
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          type: array
+                        redirectUrl:
+                          type: string
+                        redirectUrlRewriteRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              description: The string that should be substituted into
+                                matching portions of the subject string during a substitution
+                                operation to produce a new string.
+                              type: string
                           type: object
                       type: object
                     match:
@@ -11043,6 +11277,29 @@ spec:
                             required:
                             - host
                             type: object
+                          fallbackClusters:
+                            items:
+                              properties:
+                                host:
+                                  description: The name of a service from the service
+                                    registry.
+                                  type: string
+                                port:
+                                  description: Specifies the port on the host that
+                                    is being addressed.
+                                  properties:
+                                    number:
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      type: integer
+                                  type: object
+                                subset:
+                                  description: The name of a subset within the service.
+                                  type: string
+                              required:
+                              - host
+                              type: object
+                            type: array
                           headers:
                             properties:
                               request:
@@ -11083,6 +11340,68 @@ spec:
                             type: integer
                         required:
                         - destination
+                        type: object
+                      type: array
+                    routeHTTPFilters:
+                      description: HTTP Filters for route scope.
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - ipAccessControl
+                            - required:
+                              - localRateLimit
+                        - required:
+                          - ipAccessControl
+                        - required:
+                          - localRateLimit
+                        properties:
+                          disable:
+                            description: Disable this filter and all request will
+                              pass.
+                            type: boolean
+                          ipAccessControl:
+                            properties:
+                              notRemoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          localRateLimit:
+                            properties:
+                              perDownstreamConnection:
+                                type: boolean
+                              statusCode:
+                                description: Default rate limit status code is 429.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              tokenBucket:
+                                properties:
+                                  fillInterval:
+                                    type: string
+                                    x-kubernetes-validations:
+                                    - message: must be a valid duration greater than
+                                        1ms
+                                      rule: duration(self) >= duration('1ms')
+                                  maxTokens:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                  tokensPefFill:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                            type: object
+                          name:
+                            description: The http filter name should be meaningful.
+                            type: string
                         type: object
                       type: array
                     timeout:
@@ -11381,6 +11700,66 @@ spec:
                 items:
                   type: string
                 type: array
+              hostHTTPFilters:
+                description: HTTP Filters for host scope.
+                items:
+                  oneOf:
+                  - not:
+                      anyOf:
+                      - required:
+                        - ipAccessControl
+                      - required:
+                        - localRateLimit
+                  - required:
+                    - ipAccessControl
+                  - required:
+                    - localRateLimit
+                  properties:
+                    disable:
+                      description: Disable this filter and all request will pass.
+                      type: boolean
+                    ipAccessControl:
+                      properties:
+                        notRemoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                        remoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    localRateLimit:
+                      properties:
+                        perDownstreamConnection:
+                          type: boolean
+                        statusCode:
+                          description: Default rate limit status code is 429.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        tokenBucket:
+                          properties:
+                            fillInterval:
+                              type: string
+                              x-kubernetes-validations:
+                              - message: must be a valid duration greater than 1ms
+                                rule: duration(self) >= duration('1ms')
+                            maxTokens:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            tokensPefFill:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                    name:
+                      description: The http filter name should be meaningful.
+                      type: string
+                  type: object
+                type: array
               hosts:
                 description: The destination hosts to which traffic is being sent.
                 items:
@@ -11628,6 +12007,180 @@ spec:
                               additionalProperties:
                                 type: string
                               type: object
+                          type: object
+                      type: object
+                    internalActiveRedirect:
+                      description: Added by ingress This policy will trigger an internal
+                        redirect according to the response code without notifying
+                        downstream.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - redirectUrl
+                          - required:
+                            - redirectUrlRewriteRegex
+                      - required:
+                        - redirectUrl
+                      - required:
+                        - redirectUrlRewriteRegex
+                      properties:
+                        allowCrossScheme:
+                          type: boolean
+                        authority:
+                          description: During internal redirect, rewrite the Authority/Host
+                            header with this value.
+                          type: string
+                        forcedAddHeaderBeforeRouteMatcher:
+                          type: boolean
+                        forcedUseOriginalHost:
+                          description: If true, the host name in the downstream request
+                            is used for redirection.
+                          type: boolean
+                        headers:
+                          description: Currently, only support for the add operation
+                            for request header.
+                          properties:
+                            request:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            response:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                          type: object
+                        maxInternalRedirects:
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        policies:
+                          items:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - redirectUrl
+                                - required:
+                                  - redirectUrlRewriteRegex
+                            - required:
+                              - redirectUrl
+                            - required:
+                              - redirectUrlRewriteRegex
+                            properties:
+                              allowCrossScheme:
+                                type: boolean
+                              authority:
+                                description: During internal redirect, rewrite the
+                                  Authority/Host header with this value.
+                                type: string
+                              forcedAddHeaderBeforeRouteMatcher:
+                                type: boolean
+                              forcedUseOriginalHost:
+                                description: If true, the host name in the downstream
+                                  request is used for redirection.
+                                type: boolean
+                              headers:
+                                description: Currently, only support for the add operation
+                                  for request header.
+                                properties:
+                                  request:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                  response:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                type: object
+                              maxInternalRedirects:
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              redirectResponseCodes:
+                                items:
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                type: array
+                              redirectUrl:
+                                type: string
+                              redirectUrlRewriteRegex:
+                                properties:
+                                  pattern:
+                                    description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                    type: string
+                                  substitution:
+                                    description: The string that should be substituted
+                                      into matching portions of the subject string
+                                      during a substitution operation to produce a
+                                      new string.
+                                    type: string
+                                type: object
+                            type: object
+                          type: array
+                        redirectResponseCodes:
+                          items:
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          type: array
+                        redirectUrl:
+                          type: string
+                        redirectUrlRewriteRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              description: The string that should be substituted into
+                                matching portions of the subject string during a substitution
+                                operation to produce a new string.
+                              type: string
                           type: object
                       type: object
                     match:
@@ -12095,6 +12648,29 @@ spec:
                             required:
                             - host
                             type: object
+                          fallbackClusters:
+                            items:
+                              properties:
+                                host:
+                                  description: The name of a service from the service
+                                    registry.
+                                  type: string
+                                port:
+                                  description: Specifies the port on the host that
+                                    is being addressed.
+                                  properties:
+                                    number:
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      type: integer
+                                  type: object
+                                subset:
+                                  description: The name of a subset within the service.
+                                  type: string
+                              required:
+                              - host
+                              type: object
+                            type: array
                           headers:
                             properties:
                               request:
@@ -12135,6 +12711,68 @@ spec:
                             type: integer
                         required:
                         - destination
+                        type: object
+                      type: array
+                    routeHTTPFilters:
+                      description: HTTP Filters for route scope.
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - ipAccessControl
+                            - required:
+                              - localRateLimit
+                        - required:
+                          - ipAccessControl
+                        - required:
+                          - localRateLimit
+                        properties:
+                          disable:
+                            description: Disable this filter and all request will
+                              pass.
+                            type: boolean
+                          ipAccessControl:
+                            properties:
+                              notRemoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          localRateLimit:
+                            properties:
+                              perDownstreamConnection:
+                                type: boolean
+                              statusCode:
+                                description: Default rate limit status code is 429.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              tokenBucket:
+                                properties:
+                                  fillInterval:
+                                    type: string
+                                    x-kubernetes-validations:
+                                    - message: must be a valid duration greater than
+                                        1ms
+                                      rule: duration(self) >= duration('1ms')
+                                  maxTokens:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                  tokensPefFill:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                            type: object
+                          name:
+                            description: The http filter name should be meaningful.
+                            type: string
                         type: object
                       type: array
                     timeout:
@@ -12433,6 +13071,66 @@ spec:
                 items:
                   type: string
                 type: array
+              hostHTTPFilters:
+                description: HTTP Filters for host scope.
+                items:
+                  oneOf:
+                  - not:
+                      anyOf:
+                      - required:
+                        - ipAccessControl
+                      - required:
+                        - localRateLimit
+                  - required:
+                    - ipAccessControl
+                  - required:
+                    - localRateLimit
+                  properties:
+                    disable:
+                      description: Disable this filter and all request will pass.
+                      type: boolean
+                    ipAccessControl:
+                      properties:
+                        notRemoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                        remoteIpBlocks:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    localRateLimit:
+                      properties:
+                        perDownstreamConnection:
+                          type: boolean
+                        statusCode:
+                          description: Default rate limit status code is 429.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        tokenBucket:
+                          properties:
+                            fillInterval:
+                              type: string
+                              x-kubernetes-validations:
+                              - message: must be a valid duration greater than 1ms
+                                rule: duration(self) >= duration('1ms')
+                            maxTokens:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                            tokensPefFill:
+                              maximum: 4294967295
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                    name:
+                      description: The http filter name should be meaningful.
+                      type: string
+                  type: object
+                type: array
               hosts:
                 description: The destination hosts to which traffic is being sent.
                 items:
@@ -12680,6 +13378,180 @@ spec:
                               additionalProperties:
                                 type: string
                               type: object
+                          type: object
+                      type: object
+                    internalActiveRedirect:
+                      description: Added by ingress This policy will trigger an internal
+                        redirect according to the response code without notifying
+                        downstream.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - redirectUrl
+                          - required:
+                            - redirectUrlRewriteRegex
+                      - required:
+                        - redirectUrl
+                      - required:
+                        - redirectUrlRewriteRegex
+                      properties:
+                        allowCrossScheme:
+                          type: boolean
+                        authority:
+                          description: During internal redirect, rewrite the Authority/Host
+                            header with this value.
+                          type: string
+                        forcedAddHeaderBeforeRouteMatcher:
+                          type: boolean
+                        forcedUseOriginalHost:
+                          description: If true, the host name in the downstream request
+                            is used for redirection.
+                          type: boolean
+                        headers:
+                          description: Currently, only support for the add operation
+                            for request header.
+                          properties:
+                            request:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            response:
+                              properties:
+                                add:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                                remove:
+                                  items:
+                                    type: string
+                                  type: array
+                                set:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                          type: object
+                        maxInternalRedirects:
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        policies:
+                          items:
+                            oneOf:
+                            - not:
+                                anyOf:
+                                - required:
+                                  - redirectUrl
+                                - required:
+                                  - redirectUrlRewriteRegex
+                            - required:
+                              - redirectUrl
+                            - required:
+                              - redirectUrlRewriteRegex
+                            properties:
+                              allowCrossScheme:
+                                type: boolean
+                              authority:
+                                description: During internal redirect, rewrite the
+                                  Authority/Host header with this value.
+                                type: string
+                              forcedAddHeaderBeforeRouteMatcher:
+                                type: boolean
+                              forcedUseOriginalHost:
+                                description: If true, the host name in the downstream
+                                  request is used for redirection.
+                                type: boolean
+                              headers:
+                                description: Currently, only support for the add operation
+                                  for request header.
+                                properties:
+                                  request:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                  response:
+                                    properties:
+                                      add:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                      remove:
+                                        items:
+                                          type: string
+                                        type: array
+                                      set:
+                                        additionalProperties:
+                                          type: string
+                                        type: object
+                                    type: object
+                                type: object
+                              maxInternalRedirects:
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              redirectResponseCodes:
+                                items:
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                type: array
+                              redirectUrl:
+                                type: string
+                              redirectUrlRewriteRegex:
+                                properties:
+                                  pattern:
+                                    description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                    type: string
+                                  substitution:
+                                    description: The string that should be substituted
+                                      into matching portions of the subject string
+                                      during a substitution operation to produce a
+                                      new string.
+                                    type: string
+                                type: object
+                            type: object
+                          type: array
+                        redirectResponseCodes:
+                          items:
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          type: array
+                        redirectUrl:
+                          type: string
+                        redirectUrlRewriteRegex:
+                          properties:
+                            pattern:
+                              description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                              type: string
+                            substitution:
+                              description: The string that should be substituted into
+                                matching portions of the subject string during a substitution
+                                operation to produce a new string.
+                              type: string
                           type: object
                       type: object
                     match:
@@ -13147,6 +14019,29 @@ spec:
                             required:
                             - host
                             type: object
+                          fallbackClusters:
+                            items:
+                              properties:
+                                host:
+                                  description: The name of a service from the service
+                                    registry.
+                                  type: string
+                                port:
+                                  description: Specifies the port on the host that
+                                    is being addressed.
+                                  properties:
+                                    number:
+                                      maximum: 4294967295
+                                      minimum: 0
+                                      type: integer
+                                  type: object
+                                subset:
+                                  description: The name of a subset within the service.
+                                  type: string
+                              required:
+                              - host
+                              type: object
+                            type: array
                           headers:
                             properties:
                               request:
@@ -13187,6 +14082,68 @@ spec:
                             type: integer
                         required:
                         - destination
+                        type: object
+                      type: array
+                    routeHTTPFilters:
+                      description: HTTP Filters for route scope.
+                      items:
+                        oneOf:
+                        - not:
+                            anyOf:
+                            - required:
+                              - ipAccessControl
+                            - required:
+                              - localRateLimit
+                        - required:
+                          - ipAccessControl
+                        - required:
+                          - localRateLimit
+                        properties:
+                          disable:
+                            description: Disable this filter and all request will
+                              pass.
+                            type: boolean
+                          ipAccessControl:
+                            properties:
+                              notRemoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                              remoteIpBlocks:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          localRateLimit:
+                            properties:
+                              perDownstreamConnection:
+                                type: boolean
+                              statusCode:
+                                description: Default rate limit status code is 429.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              tokenBucket:
+                                properties:
+                                  fillInterval:
+                                    type: string
+                                    x-kubernetes-validations:
+                                    - message: must be a valid duration greater than
+                                        1ms
+                                      rule: duration(self) >= duration('1ms')
+                                  maxTokens:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                  tokensPefFill:
+                                    maximum: 4294967295
+                                    minimum: 0
+                                    type: integer
+                                type: object
+                            type: object
+                          name:
+                            description: The http filter name should be meaningful.
+                            type: string
                         type: object
                       type: array
                     timeout:
@@ -15067,6 +16024,60 @@ spec:
                           operation:
                             description: Operation specifies the operation of a request.
                             properties:
+                              extensionNotPaths:
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
+                                type: array
+                              extensionPaths:
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
+                                type: array
                               hosts:
                                 description: Optional.
                                 items:
@@ -15437,6 +16448,60 @@ spec:
                           operation:
                             description: Operation specifies the operation of a request.
                             properties:
+                              extensionNotPaths:
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
+                                type: array
+                              extensionPaths:
+                                items:
+                                  oneOf:
+                                  - not:
+                                      anyOf:
+                                      - required:
+                                        - exact
+                                      - required:
+                                        - prefix
+                                      - required:
+                                        - regex
+                                  - required:
+                                    - exact
+                                  - required:
+                                    - prefix
+                                  - required:
+                                    - regex
+                                  properties:
+                                    exact:
+                                      type: string
+                                    prefix:
+                                      type: string
+                                    regex:
+                                      description: RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+                                      type: string
+                                  type: object
+                                type: array
                               hosts:
                                 description: Optional.
                                 items:

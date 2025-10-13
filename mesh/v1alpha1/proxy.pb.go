@@ -1066,7 +1066,10 @@ type ProxyConfig struct {
 	//	  mode: IN_MESH
 	//
 	// ```
-	ProxyHeaders  *ProxyConfig_ProxyHeaders `protobuf:"bytes,39,opt,name=proxy_headers,json=proxyHeaders,proto3" json:"proxy_headers,omitempty"`
+	ProxyHeaders *ProxyConfig_ProxyHeaders `protobuf:"bytes,39,opt,name=proxy_headers,json=proxyHeaders,proto3" json:"proxy_headers,omitempty"`
+	// Added by ingress
+	// Disable apln h2 protocol for envoy proxy.
+	DisableAlpnH2 bool `protobuf:"varint,110,opt,name=disable_alpn_h2,json=disableAlpnH2,proto3" json:"disable_alpn_h2,omitempty"` // End added by ingress
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1367,6 +1370,13 @@ func (x *ProxyConfig) GetProxyHeaders() *ProxyConfig_ProxyHeaders {
 		return x.ProxyHeaders
 	}
 	return nil
+}
+
+func (x *ProxyConfig) GetDisableAlpnH2() bool {
+	if x != nil {
+		return x.DisableAlpnH2
+	}
+	return false
 }
 
 type isProxyConfig_ClusterName interface {
@@ -2787,7 +2797,7 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"poll_delay\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\tpollDelay\x126\n" +
 	"\bfallback\x18\x02 \x01(\v2\x1a.google.protobuf.BoolValueR\bfallbackB\n" +
 	"\n" +
-	"\bprovider\"\xc3#\n" +
+	"\bprovider\"\xeb#\n" +
 	"\vProxyConfig\x12\x1f\n" +
 	"\vconfig_path\x18\x01 \x01(\tR\n" +
 	"configPath\x12\x1f\n" +
@@ -2828,7 +2838,8 @@ const file_mesh_v1alpha1_proxy_proto_rawDesc = "" +
 	"\x13ca_certificates_pem\x18\" \x03(\tR\x11caCertificatesPem\x12:\n" +
 	"\x05image\x18# \x01(\v2$.istio.networking.v1beta1.ProxyImageR\x05image\x12Y\n" +
 	"\x14private_key_provider\x18& \x01(\v2'.istio.mesh.v1alpha1.PrivateKeyProviderR\x12privateKeyProvider\x12R\n" +
-	"\rproxy_headers\x18' \x01(\v2-.istio.mesh.v1alpha1.ProxyConfig.ProxyHeadersR\fproxyHeaders\x1a@\n" +
+	"\rproxy_headers\x18' \x01(\v2-.istio.mesh.v1alpha1.ProxyConfig.ProxyHeadersR\fproxyHeaders\x12&\n" +
+	"\x0fdisable_alpn_h2\x18n \x01(\bR\rdisableAlpnH2\x1a@\n" +
 	"\x12ProxyMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a@\n" +

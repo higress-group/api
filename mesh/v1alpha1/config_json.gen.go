@@ -424,6 +424,17 @@ func (this *MeshConfig_ProxyPathNormalization) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for MeshConfig_CryptombPrivateKeyConfig
+func (this *MeshConfig_CryptombPrivateKeyConfig) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MeshConfig_CryptombPrivateKeyConfig
+func (this *MeshConfig_CryptombPrivateKeyConfig) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 // MarshalJSON is a custom marshaler for MeshConfig_TLSConfig
 func (this *MeshConfig_TLSConfig) MarshalJSON() ([]byte, error) {
 	str, err := ConfigMarshaler.MarshalToString(this)
@@ -476,6 +487,28 @@ func (this *Certificate) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON is a custom unmarshaler for Certificate
 func (this *Certificate) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for MSEIngressGlobalConfig
+func (this *MSEIngressGlobalConfig) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MSEIngressGlobalConfig
+func (this *MSEIngressGlobalConfig) UnmarshalJSON(b []byte) error {
+	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
+// MarshalJSON is a custom marshaler for MSEIngressGlobalConfig_AccessLogFilter
+func (this *MSEIngressGlobalConfig_AccessLogFilter) MarshalJSON() ([]byte, error) {
+	str, err := ConfigMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for MSEIngressGlobalConfig_AccessLogFilter
+func (this *MSEIngressGlobalConfig_AccessLogFilter) UnmarshalJSON(b []byte) error {
 	return ConfigUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 

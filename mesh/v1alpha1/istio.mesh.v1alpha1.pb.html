@@ -5,7 +5,7 @@ location: https://istio.io/docs/reference/config/istio.mesh.v1alpha1.html
 layout: protoc-gen-docs
 generator: protoc-gen-docs
 weight: 20
-number_of_entries: 81
+number_of_entries: 84
 ---
 <p>Configuration affecting the service mesh as a whole.</p>
 
@@ -539,6 +539,22 @@ This setting can be overridden on a per-host basis using the Virtual Service
 API.
 All settings in the retry policy except <code>perTryTimeout</code> can currently be
 configured globally via this field.</p>
+
+</td>
+</tr>
+<tr id="MeshConfig-cryptomb_config">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-cryptomb_config">cryptombConfig</a></code></div>
+<div class="type"><a href="#MeshConfig-CryptombPrivateKeyConfig">CryptombPrivateKeyConfig</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-mse_ingress_global_config">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-mse_ingress_global_config">mseIngressGlobalConfig</a></code></div>
+<div class="type"><a href="#MSEIngressGlobalConfig">MSEIngressGlobalConfig</a></div>
+</div></td>
+<td>
+<p>End add by ingress</p>
 
 </td>
 </tr>
@@ -2748,6 +2764,42 @@ For example, <code>/a%2f/b</code> normalizes to <code>a/b</code>.</p>
 </tbody>
 </table>
 </section>
+<h3 id="MeshConfig-CryptombPrivateKeyConfig">CryptombPrivateKeyConfig</h3>
+<section>
+<p>Add by ingress</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MeshConfig-CryptombPrivateKeyConfig-enable_cryptomb">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-CryptombPrivateKeyConfig-enable_cryptomb">enableCryptomb</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-CryptombPrivateKeyConfig-pool_delay">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-CryptombPrivateKeyConfig-pool_delay">poolDelay</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MeshConfig-CryptombPrivateKeyConfig-enable_qat">
+<td><div class="field"><div class="name"><code><a href="#MeshConfig-CryptombPrivateKeyConfig-enable_qat">enableQat</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
 <h3 id="MeshConfig-TLSConfig">TLSConfig</h3>
 <section>
 <table class="message-fields">
@@ -3111,6 +3163,108 @@ mode as <code>ISTIO_MUTUAL</code>.</p>
 </div></td>
 <td>
 <p>Describes the source of configuration, if nothing is specified default is MCP</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="MSEIngressGlobalConfig">MSEIngressGlobalConfig</h2>
+<section>
+<p>Add by ingress</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MSEIngressGlobalConfig-tls_min_protocol_version">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-tls_min_protocol_version">tlsMinProtocolVersion</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>Control tls min protocol version for all gateways.</p>
+
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-tls_max_protocol_version">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-tls_max_protocol_version">tlsMaxProtocolVersion</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>Control tls max protocol version for all gateways.</p>
+
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-tls_cipher_suites">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-tls_cipher_suites">tlsCipherSuites</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>Control tls cipher suites for all gateways.</p>
+
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-upstream_idle_timeout">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-upstream_idle_timeout">upstreamIdleTimeout</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-enable_h3">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-enable_h3">enableH3</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-access_log_filters">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-access_log_filters">accessLogFilters</a></code></div>
+<div class="type"><a href="#MSEIngressGlobalConfig-AccessLogFilter">AccessLogFilter[]</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-enable_proxy_protocol">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-enable_proxy_protocol">enableProxyProtocol</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="MSEIngressGlobalConfig-AccessLogFilter">AccessLogFilter</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="MSEIngressGlobalConfig-AccessLogFilter-host">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-AccessLogFilter-host">host</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The user should make sure the host following
+the re2 syntax if the host is wirecard.</p>
+
+</td>
+</tr>
+<tr id="MSEIngressGlobalConfig-AccessLogFilter-sample_rate">
+<td><div class="field"><div class="name"><code><a href="#MSEIngressGlobalConfig-AccessLogFilter-sample_rate">sampleRate</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>Control the log whether or not log.</p>
 
 </td>
 </tr>
@@ -3929,6 +4083,16 @@ Note: currently all headers are enabled by default.</p>
   metadataExchangeHeaders:
     mode: IN_MESH
 </code></pre>
+
+</td>
+</tr>
+<tr id="ProxyConfig-disable_alpn_h2">
+<td><div class="field"><div class="name"><code><a href="#ProxyConfig-disable_alpn_h2">disableAlpnH2</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>Added by ingress
+Disable apln h2 protocol for envoy proxy.</p>
 
 </td>
 </tr>

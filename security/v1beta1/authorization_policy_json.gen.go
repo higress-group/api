@@ -94,6 +94,17 @@ func (this *Condition) UnmarshalJSON(b []byte) error {
 	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
 }
 
+// MarshalJSON is a custom marshaler for StringMatch
+func (this *StringMatch) MarshalJSON() ([]byte, error) {
+	str, err := AuthorizationPolicyMarshaler.MarshalToString(this)
+	return []byte(str), err
+}
+
+// UnmarshalJSON is a custom unmarshaler for StringMatch
+func (this *StringMatch) UnmarshalJSON(b []byte) error {
+	return AuthorizationPolicyUnmarshaler.Unmarshal(bytes.NewReader(b), this)
+}
+
 var (
 	AuthorizationPolicyMarshaler   = &jsonpb.Marshaler{}
 	AuthorizationPolicyUnmarshaler = &jsonpb.Unmarshaler{AllowUnknownFields: true}

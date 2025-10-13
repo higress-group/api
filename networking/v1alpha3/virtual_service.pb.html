@@ -6,7 +6,7 @@ layout: protoc-gen-docs
 generator: protoc-gen-docs
 schema: istio.networking.v1alpha3.VirtualService
 aliases: [/docs/reference/config/networking/v1alpha3/virtual-service]
-number_of_entries: 30
+number_of_entries: 37
 ---
 <p>Configuration affecting traffic routing. Here are a few terms useful to define
 in the context of traffic routing.</p>
@@ -148,6 +148,15 @@ gateway (<code>mesh</code>) will be used, which would apply the rule to all
 sidecars in the mesh. If a list of gateway names is provided, the
 rules will apply only to the gateways. To apply the rules to both
 gateways and sidecars, specify <code>mesh</code> as one of the gateway names.</p>
+
+</td>
+</tr>
+<tr id="VirtualService-hostHTTPFilters">
+<td><div class="field"><div class="name"><code><a href="#VirtualService-hostHTTPFilters">hostHTTPFilters</a></code></div>
+<div class="type"><a href="#HTTPFilter">HTTPFilter[]</a></div>
+</div></td>
+<td>
+<p>HTTP Filters for host scope.</p>
 
 </td>
 </tr>
@@ -434,6 +443,15 @@ service version determine the proportion of traffic it receives.</p>
 
 </td>
 </tr>
+<tr id="HTTPRoute-routeHTTPFilters">
+<td><div class="field"><div class="name"><code><a href="#HTTPRoute-routeHTTPFilters">routeHTTPFilters</a></code></div>
+<div class="type"><a href="#HTTPFilter">HTTPFilter[]</a></div>
+</div></td>
+<td>
+<p>HTTP Filters for route scope.</p>
+
+</td>
+</tr>
 <tr id="HTTPRoute-redirect">
 <td><div class="field"><div class="name"><code><a href="#HTTPRoute-redirect">redirect</a></code></div>
 <div class="type"><a href="#HTTPRedirect">HTTPRedirect</a></div>
@@ -443,6 +461,17 @@ service version determine the proportion of traffic it receives.</p>
 If traffic passthrough option is specified in the rule,
 route/redirect will be ignored. The redirect primitive can be used to
 send a HTTP 301 redirect to a different URI or Authority.</p>
+
+</td>
+</tr>
+<tr id="HTTPRoute-internal_active_redirect">
+<td><div class="field"><div class="name"><code><a href="#HTTPRoute-internal_active_redirect">internalActiveRedirect</a></code></div>
+<div class="type"><a href="#HTTPInternalActiveRedirect">HTTPInternalActiveRedirect</a></div>
+</div></td>
+<td>
+<p>Added by ingress
+This policy will trigger an internal redirect according to the response code
+without notifying downstream.</p>
 
 </td>
 </tr>
@@ -1279,6 +1308,15 @@ Otherwise, if weight is <code>0</code>, the destination will not receive any tra
 </div></td>
 <td>
 <p>Header manipulation rules</p>
+
+</td>
+</tr>
+<tr id="HTTPRouteDestination-fallback_clusters">
+<td><div class="field"><div class="name"><code><a href="#HTTPRouteDestination-fallback_clusters">fallbackClusters</a></code></div>
+<div class="type"><a href="#Destination">Destination[]</a></div>
+</div></td>
+<td>
+<p>Added by ingress</p>
 
 </td>
 </tr>
@@ -2415,6 +2453,367 @@ matching or selection for final routing.</p>
 <tr id="Percent-value">
 <td><div class="field"><div class="name"><code><a href="#Percent-value">value</a></code></div>
 <div class="type">double</div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPInternalActiveRedirect">HTTPInternalActiveRedirect</h2>
+<section>
+<p>Added by ingress
+More detail information, please see envoy document about InternalRedirectPolicy.
+The only difference is that this redirect policy allow user to specify how to control the redirect url.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPInternalActiveRedirect-max_internal_redirects">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-max_internal_redirects">maxInternalRedirects</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-redirect_response_codes">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-redirect_response_codes">redirectResponseCodes</a></code></div>
+<div class="type">uint32[]</div>
+</div></td>
+<td>
+<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-redirect_url" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-redirect_url">redirectUrl</a></code></div>
+<div class="type">string (oneof)</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-redirect_url_rewrite_regex" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-redirect_url_rewrite_regex">redirectUrlRewriteRegex</a></code></div>
+<div class="type"><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-allow_cross_scheme">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-allow_cross_scheme">allowCrossScheme</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-headers">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-headers">headers</a></code></div>
+<div class="type"><a href="#Headers">Headers</a></div>
+</div></td>
+<td>
+<p>Currently, only support for the add operation for request header.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-authority">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-authority">authority</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-forced_use_original_host">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-forced_use_original_host">forcedUseOriginalHost</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If true, the host name in the downstream request is used for redirection.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-forced_add_header_before_route_matcher">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-forced_add_header_before_route_matcher">forcedAddHeaderBeforeRouteMatcher</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-policies">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-policies">policies</a></code></div>
+<div class="type"><a href="#HTTPInternalActiveRedirect-RedirectPolicy">RedirectPolicy[]</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h3 id="HTTPInternalActiveRedirect-RedirectPolicy">RedirectPolicy</h3>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-max_internal_redirects">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-max_internal_redirects">maxInternalRedirects</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_response_codes">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-redirect_response_codes">redirectResponseCodes</a></code></div>
+<div class="type">uint32[]</div>
+</div></td>
+<td>
+<p>Invalid code is in [200, 301, 302, 303, 304, 307, 308]</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-redirect_url">redirectUrl</a></code></div>
+<div class="type">string (oneof)</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-redirect_url_rewrite_regex" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-redirect_url_rewrite_regex">redirectUrlRewriteRegex</a></code></div>
+<div class="type"><a href="#RegexMatchAndSubstitute">RegexMatchAndSubstitute (oneof)</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-allow_cross_scheme">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-allow_cross_scheme">allowCrossScheme</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-headers">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-headers">headers</a></code></div>
+<div class="type"><a href="#Headers">Headers</a></div>
+</div></td>
+<td>
+<p>Currently, only support for the add operation for request header.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-authority">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-authority">authority</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>During internal redirect, rewrite the Authority/Host header with this value.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_use_original_host">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-forced_use_original_host">forcedUseOriginalHost</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>If true, the host name in the downstream request is used for redirection.</p>
+
+</td>
+</tr>
+<tr id="HTTPInternalActiveRedirect-RedirectPolicy-forced_add_header_before_route_matcher">
+<td><div class="field"><div class="name"><code><a href="#HTTPInternalActiveRedirect-RedirectPolicy-forced_add_header_before_route_matcher">forcedAddHeaderBeforeRouteMatcher</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="RegexMatchAndSubstitute">RegexMatchAndSubstitute</h2>
+<section>
+<p>Describes how to match a string and then produce a new string using a regular
+expression and a substitution string.</p>
+
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="RegexMatchAndSubstitute-pattern">
+<td><div class="field"><div class="name"><code><a href="#RegexMatchAndSubstitute-pattern">pattern</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>RE2 style regex-based match (<a href="https://github.com/google/re2/wiki/Syntax)">https://github.com/google/re2/wiki/Syntax)</a>.</p>
+
+</td>
+</tr>
+<tr id="RegexMatchAndSubstitute-substitution">
+<td><div class="field"><div class="name"><code><a href="#RegexMatchAndSubstitute-substitution">substitution</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The string that should be substituted into matching portions of the
+subject string during a substitution operation to produce a new string.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="HTTPFilter">HTTPFilter</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="HTTPFilter-name">
+<td><div class="field"><div class="name"><code><a href="#HTTPFilter-name">name</a></code></div>
+<div class="type">string</div>
+</div></td>
+<td>
+<p>The http filter name should be meaningful.
+E.g. ip-access-control, jwt, rbac, cors.</p>
+
+</td>
+</tr>
+<tr id="HTTPFilter-disable">
+<td><div class="field"><div class="name"><code><a href="#HTTPFilter-disable">disable</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+<p>Disable this filter and all request will pass.</p>
+
+</td>
+</tr>
+<tr id="HTTPFilter-ip_access_control" class="oneof oneof-start">
+<td><div class="field"><div class="name"><code><a href="#HTTPFilter-ip_access_control">ipAccessControl</a></code></div>
+<div class="type"><a href="#IPAccessControl">IPAccessControl (oneof)</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="HTTPFilter-local_rate_limit" class="oneof">
+<td><div class="field"><div class="name"><code><a href="#HTTPFilter-local_rate_limit">localRateLimit</a></code></div>
+<div class="type"><a href="#LocalRateLimit">LocalRateLimit (oneof)</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="IPAccessControl">IPAccessControl</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="IPAccessControl-remote_ip_blocks">
+<td><div class="field"><div class="name"><code><a href="#IPAccessControl-remote_ip_blocks">remoteIpBlocks</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>Used for white ip access control</p>
+
+</td>
+</tr>
+<tr id="IPAccessControl-not_remote_ip_blocks">
+<td><div class="field"><div class="name"><code><a href="#IPAccessControl-not_remote_ip_blocks">notRemoteIpBlocks</a></code></div>
+<div class="type">string[]</div>
+</div></td>
+<td>
+<p>Used for black ip access control</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="LocalRateLimit">LocalRateLimit</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="LocalRateLimit-token_bucket">
+<td><div class="field"><div class="name"><code><a href="#LocalRateLimit-token_bucket">tokenBucket</a></code></div>
+<div class="type"><a href="#TokenBucket">TokenBucket</a></div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="LocalRateLimit-per_downstream_connection">
+<td><div class="field"><div class="name"><code><a href="#LocalRateLimit-per_downstream_connection">perDownstreamConnection</a></code></div>
+<div class="type">bool</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="LocalRateLimit-status_code">
+<td><div class="field"><div class="name"><code><a href="#LocalRateLimit-status_code">statusCode</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+<p>Default rate limit status code is 429.</p>
+
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<h2 id="TokenBucket">TokenBucket</h2>
+<section>
+<table class="message-fields">
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr id="TokenBucket-max_tokens">
+<td><div class="field"><div class="name"><code><a href="#TokenBucket-max_tokens">maxTokens</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="TokenBucket-tokens_pef_fill">
+<td><div class="field"><div class="name"><code><a href="#TokenBucket-tokens_pef_fill">tokensPefFill</a></code></div>
+<div class="type">uint32</div>
+</div></td>
+<td>
+</td>
+</tr>
+<tr id="TokenBucket-fill_interval">
+<td><div class="field"><div class="name"><code><a href="#TokenBucket-fill_interval">fillInterval</a></code></div>
+<div class="type"><a href="https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#duration">Duration</a></div>
 </div></td>
 <td>
 </td>
