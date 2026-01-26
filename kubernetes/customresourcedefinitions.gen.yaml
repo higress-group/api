@@ -6508,6 +6508,21 @@ spec:
                   type: object
                 maxItems: 16
                 type: array
+              wasmPhase:
+                description: |-
+                  Determines where in the filter chain this `EnvoyFilter` is to be injected.
+
+                  Valid Options: AUTHN, AUTHZ, STATS
+                enum:
+                - UNSPECIFIED_PHASE
+                - AUTHN
+                - AUTHZ
+                - STATS
+                type: string
+              wasmPriority:
+                description: Determines ordering of `EnvoyFilter` in the same `wasm_phase`.
+                format: int32
+                type: integer
               workloadSelector:
                 description: Criteria used to select the specific set of pods/VMs
                   on which this patch configuration should be applied.
@@ -10506,7 +10521,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
@@ -11877,7 +11892,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
@@ -13248,7 +13263,7 @@ spec:
                           properties:
                             bytes:
                               description: response body as base64 encoded bytes.
-                              format: binary
+                              format: byte
                               type: string
                             string:
                               type: string
