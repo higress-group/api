@@ -461,6 +461,29 @@ priority, creation time, fully qualified resource name.</p>
 
 </td>
 </tr>
+<tr id="EnvoyFilter-wasm_phase">
+<td><div class="field"><div class="name"><code><a href="#EnvoyFilter-wasm_phase">wasmPhase</a></code></div>
+<div class="type"><a href="https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html#PluginPhase">PluginPhase</a></div>
+</div></td>
+<td>
+<p>Determines where in the filter chain this <code>EnvoyFilter</code> is to be injected.</p>
+
+</td>
+</tr>
+<tr id="EnvoyFilter-wasm_priority">
+<td><div class="field"><div class="name"><code><a href="#EnvoyFilter-wasm_priority">wasmPriority</a></code></div>
+<div class="type">int32</div>
+</div></td>
+<td>
+<p>Determines ordering of <code>EnvoyFilter</code> in the same <code>wasm_phase</code>.
+When multiple <code>EnvoyFilter</code> are applied to the same workload in the
+same <code>wasm_phase</code>, they will be applied by priority, in descending order.
+If <code>priority</code> is not set, or two <code>EnvoyFilter</code> exist with the same
+value, the ordering will be deterministically derived from name and
+namespace of the <code>EnvoyFilter</code>. Defaults to <code>0</code>.</p>
+
+</td>
+</tr>
 </tbody>
 </table>
 </section>

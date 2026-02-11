@@ -422,6 +422,7 @@ syntax = "proto3";
 //                 descriptor_key: "path"
 package istio.networking.v1alpha3;
 
+import "extensions/v1alpha1/wasm.proto";
 import "google/protobuf/struct.proto";
 import "networking/v1alpha3/sidecar.proto";
 import "type/v1beta1/selector.proto";
@@ -924,4 +925,15 @@ message EnvoyFilter {
   // Patch sets are sorted in the following ascending key order:
   // priority, creation time, fully qualified resource name.
   int32 priority = 5;
+
+  // Determines where in the filter chain this `EnvoyFilter` is to be injected.
+  istio.extensions.v1alpha1.PluginPhase wasm_phase = 7;
+
+  // Determines ordering of `EnvoyFilter` in the same `wasm_phase`.
+  // When multiple `EnvoyFilter` are applied to the same workload in the
+  // same `wasm_phase`, they will be applied by priority, in descending order.
+  // If `priority` is not set, or two `EnvoyFilter` exist with the same
+  // value, the ordering will be deterministically derived from name and
+  // namespace of the `EnvoyFilter`. Defaults to `0`.
+  int32 wasm_priority = 8;
 }
